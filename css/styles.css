@@ -148,6 +148,36 @@ body {
     width: 100%; /* Slides in from left */
 }
 
+/* ── Nav actions group (theme toggle + hamburger) ──
+   Always visible on the right side of the nav bar.
+   On desktop the hamburger is hidden inside this group.
+   On mobile both are visible. */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-shrink: 0;
+}
+
+/* Theme toggle button — always visible in nav bar on all screen sizes */
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    transition: transform var(--duration-base) var(--ease-smooth),
+                background var(--duration-base) var(--ease-smooth);
+}
+
+.theme-toggle:hover {
+    background: var(--gradient-subtle);
+    transform: scale(1.1);
+}
+
 /* ── Mobile hamburger menu button ──
    Hidden on desktop, shown on mobile via the @media query below */
 .nav-toggle {
@@ -740,21 +770,18 @@ body {
 
 
 /* ═══════════════════════════════════════════════
-   12. RESPONSIVE — MOBILE
-   At 768px and below (phones and small tablets),
-   we switch from desktop layouts to single-column stacks.
+   12. RESPONSIVE — TABLETS & MOBILE (≤ 768px)
    ═══════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
 
-    /* Reduce side padding on small screens */
     .container {
         padding: 0 var(--space-5);
     }
 
-    /* On mobile, the nav links become a full-screen overlay menu.
-       They're hidden by default (display: none) and shown when
-       JS adds the .active class. */
+    /* ── Mobile nav overlay ──
+       The links slide down as a glassy full-screen overlay.
+       The theme toggle stays in the nav bar (outside this overlay). */
     .nav-links {
         display: none;
         position: fixed;
@@ -762,37 +789,61 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
+        /* Same glass recipe as the nav bar */
         background: var(--nav-scrolled-bg-glass);
-        backdrop-filter: blur(20px);
+        backdrop-filter: blur(32px) saturate(180%);
+        -webkit-backdrop-filter: blur(32px) saturate(180%);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: var(--space-10);
+        gap: var(--space-8);
+        /* Smooth slide-in */
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity var(--duration-base) var(--ease-smooth),
+                    transform var(--duration-base) var(--ease-smooth);
+        pointer-events: none;
     }
 
     .nav-links.active {
-        display: flex; /* JS toggles this class to open the menu */
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
     }
 
     .nav-link {
-        font-size: var(--text-xl); /* Bigger tap targets on mobile */
+        font-size: var(--text-xl);
     }
 
+    /* Show the hamburger button on mobile */
     .nav-toggle {
-        display: flex; /* Show the hamburger button on mobile */
+        display: flex;
     }
 
-    /* Hero: remove full-screen height on mobile */
+    /* Animate hamburger → X when menu is open */
+    .nav-toggle.active span:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+    }
+    .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    .nav-toggle.active span:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* ── Hero ── */
     .hero {
         min-height: auto;
-        padding-top: calc(var(--nav-height) + var(--space-12));
-        padding-bottom: var(--space-12);
+        padding-top: calc(var(--nav-height) + var(--space-10));
+        padding-bottom: var(--space-10);
     }
 
-    /* Switch hero from 2 columns to 1 column stacked */
     .hero-inner {
         grid-template-columns: 1fr;
-        gap: var(--space-12);
+        gap: var(--space-10);
         text-align: center;
     }
 
@@ -802,36 +853,55 @@ body {
 
     .hero-tag {
         margin-left: auto;
-        margin-right: auto; /* Re-centres the pill in single-column layout */
+        margin-right: auto;
     }
 
     .hero-description {
         max-width: 100%;
+        font-size: var(--text-base);
     }
 
     .hero-cta {
         justify-content: center;
+        flex-wrap: wrap;
     }
 
-    /* Move the 3D canvas above the text on mobile */
     .hero-visual {
         order: -1;
     }
 
     #threeHeroCanvas {
-        max-width: 320px;
+        max-width: 280px;
     }
 
+    /* ── Sections ── */
     .section {
-        padding: var(--space-20) 0; /* Less vertical padding on mobile */
+        padding: var(--space-16) 0;
     }
 
-    /* Switch work cards from 2 columns to 1 */
+    .section-title {
+        font-size: var(--text-3xl);
+    }
+
+    .section-description {
+        font-size: var(--text-base);
+    }
+
+    /* ── Cards ── */
     .work-grid {
         grid-template-columns: 1fr;
+        gap: var(--space-5);
     }
 
-    /* Stack thinking items vertically on mobile */
+    .work-card {
+        padding: var(--space-6);
+    }
+
+    .work-card-title {
+        font-size: var(--text-xl);
+    }
+
+    /* ── Thinking list ── */
     .thinking-item {
         flex-direction: column;
         align-items: flex-start;
@@ -842,25 +912,54 @@ body {
         margin-left: 0;
     }
 
+    /* ── Contact ── */
     .contact {
-        padding: var(--space-24) 0;
+        padding: var(--space-20) 0;
+    }
+
+    .contact-title {
+        font-size: var(--text-3xl);
     }
 
     .contact-links {
-        flex-direction: column;
-        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-3);
     }
 
-    /* Stack footer copyright and links vertically */
+    /* ── Footer ── */
     .footer-inner {
         flex-direction: column;
         gap: var(--space-4);
         text-align: center;
     }
+
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-4);
+    }
 }
 
-/* At very small screens (phones in portrait), make CTA buttons full-width */
+
+/* ═══════════════════════════════════════════════
+   SMALL PHONES (≤ 480px)
+   ═══════════════════════════════════════════════ */
+
 @media (max-width: 480px) {
+
+    .container {
+        padding: 0 var(--space-4);
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    #threeHeroCanvas {
+        max-width: 240px;
+    }
+
     .hero-cta {
         flex-direction: column;
         width: 100%;
@@ -868,7 +967,50 @@ body {
 
     .btn {
         width: 100%;
-        max-width: 280px;
+        max-width: 260px;
+    }
+
+    .section-title {
+        font-size: var(--text-2xl);
+    }
+
+    .work-card-title {
+        font-size: var(--text-lg);
+    }
+
+    .thinking-title {
+        font-size: var(--text-lg);
+    }
+
+    .contact-title {
+        font-size: var(--text-2xl);
+    }
+
+    /* Wrap contact buttons to full width on tiny screens */
+    .contact-btn {
+        width: 100%;
+        max-width: 260px;
+        justify-content: center;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   VERY SMALL PHONES (≤ 375px — iPhone SE etc.)
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 375px) {
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    #threeHeroCanvas {
+        max-width: 200px;
+    }
+
+    .section-label {
+        font-size: 0.65rem;
     }
 }
 
