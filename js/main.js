@@ -60,13 +60,25 @@
             document.body.classList.toggle('menu-open', isOpen);
         });
 
-        // Close the menu automatically when any nav link is clicked
+        // Helper to close the sidebar
+        function closeMenu() {
+            navLinks.classList.remove('active');
+            navToggle.classList.remove('active');
+            document.body.classList.remove('menu-open');
+        }
+
+        // Close when any nav link is clicked
         navLinks.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                navToggle.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            });
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close when tapping the dimmed backdrop (body::before)
+        document.addEventListener('click', (e) => {
+            if (document.body.classList.contains('menu-open') &&
+                !navLinks.contains(e.target) &&
+                !navToggle.contains(e.target)) {
+                closeMenu();
+            }
         });
     }
 
