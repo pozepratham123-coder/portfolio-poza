@@ -60,11 +60,13 @@ body {
     display: flex;
     align-items: center;
 
-    /* "Glassmorphism" effect — semi-transparent background + blur */
+    /* Glassmorphism effect — semi-transparent background + strong blur */
     background: var(--nav-bg-glass);
-    backdrop-filter: blur(20px);          /* Blurs whatever is behind the nav */
-    -webkit-backdrop-filter: blur(20px);  /* Same for Safari */
+    backdrop-filter: blur(32px) saturate(180%);          /* Blur + boost colour saturation behind */
+    -webkit-backdrop-filter: blur(32px) saturate(180%);  /* Same for Safari */
 
+    /* Subtle glass edge: slightly lighter top border, standard bottom border */
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
     border-bottom: 1px solid var(--border);
 
     /* Smooth transition when background changes on scroll */
