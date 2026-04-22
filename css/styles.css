@@ -1,51 +1,88 @@
 /*
- * Component Styles
- * Ultra-Minimal Atomic Portfolio
+ * styles.css — Component Styles
+ *
+ * This file contains the visual styles for every component on the site.
+ * It's loaded AFTER reset.css and tokens.css, so it can use all the
+ * CSS variables defined in tokens.css (e.g. var(--accent-purple)).
+ *
+ * Structure:
+ *   1. Global body & container
+ *   2. Navigation bar
+ *   3. Hero section
+ *   4. Buttons
+ *   5. Sections (shared layout for all content sections)
+ *   6. Work Cards
+ *   7. Thinking / List Items
+ *   8. Contact section
+ *   9. Footer
+ *  10. Scroll Reveal animation
+ *  11. Particle background canvas
+ *  12. Responsive (mobile) overrides
+ *  13. Reduced motion accessibility
  */
 
-/* ── Global ── */
+
+/* ═══════════════════════════════════════════════
+   1. GLOBAL
+   ═══════════════════════════════════════════════ */
 
 body {
-    font-family: var(--font-body);
-    background: var(--bg);
-    color: var(--text-primary);
-    overflow-x: auto;
+    font-family: var(--font-body);       /* System font stack defined in tokens.css */
+    background: var(--bg);               /* White in light mode, near-black in dark */
+    color: var(--text-primary);          /* Dark in light mode, light in dark */
+    overflow-x: auto;                    /* Allow horizontal scroll if needed (prevents clipping) */
 }
 
+/* The container centres content and sets a max width so text
+   doesn't stretch edge-to-edge on wide monitors */
 .container {
     width: 100%;
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 var(--space-8);
+    max-width: var(--container-max); /* Caps at 1200px */
+    margin: 0 auto;                  /* auto left/right margins centre the box */
+    padding: 0 var(--space-8);       /* 32px side padding so content never touches edges */
 }
 
-/* ── Navigation ── */
+
+/* ═══════════════════════════════════════════════
+   2. NAVIGATION BAR
+   The nav is "fixed" — it stays at the top of the screen
+   even when you scroll. z-index: 1000 keeps it above
+   all other content.
+   ═══════════════════════════════════════════════ */
 
 .nav {
-    position: fixed;
+    position: fixed;     /* Sticks to the top of the viewport */
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1000;       /* Stacks above everything else on the page */
     height: var(--nav-height);
     display: flex;
     align-items: center;
+
+    /* "Glassmorphism" effect — semi-transparent background + blur */
     background: var(--nav-bg-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);          /* Blurs whatever is behind the nav */
+    -webkit-backdrop-filter: blur(20px);  /* Same for Safari */
+
     border-bottom: 1px solid var(--border);
+
+    /* Smooth transition when background changes on scroll */
     transition: background var(--duration-base) var(--ease-smooth),
-        box-shadow var(--duration-base) var(--ease-smooth);
+                box-shadow  var(--duration-base) var(--ease-smooth);
 }
 
+/* When the user scrolls, JS adds .scrolled — this makes the nav
+   more opaque and adds a shadow so it looks elevated */
 .nav.scrolled {
     background: var(--nav-scrolled-bg-glass);
     box-shadow: var(--shadow-sm);
 }
 
+/* Nav inner is a flex row that spaces logo and links apart */
 .nav-inner {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Logo on left, links on right */
     align-items: center;
     width: 100%;
     max-width: var(--container-max);
@@ -53,6 +90,7 @@ body {
     padding: 0 var(--space-8);
 }
 
+/* Logo link in the top-left corner */
 .nav-logo {
     display: flex;
     align-items: center;
@@ -67,43 +105,49 @@ body {
 .nav-logo-img {
     height: 32px;
     width: auto;
-    object-fit: contain;
+    object-fit: contain; /* Keeps aspect ratio while fitting in the box */
 }
 
+/* The horizontal list of nav links */
 .nav-links {
     display: flex;
-    gap: var(--space-10);
+    gap: var(--space-10); /* Space between each link */
 }
 
+/* Individual nav link styling */
 .nav-link {
     font-size: var(--text-sm);
     font-weight: 450;
     color: var(--text-secondary);
     letter-spacing: var(--tracking-wide);
     transition: color var(--duration-base) var(--ease-smooth);
-    position: relative;
+    position: relative; /* Needed so the underline ::after can be positioned */
 }
 
 .nav-link:hover {
     color: var(--text-primary);
 }
 
+/* Animated underline on hover.
+   ::after creates a pseudo-element (a fake element in CSS).
+   It starts with width: 0 (invisible) and expands to 100% on hover. */
 .nav-link::after {
-    content: '';
+    content: '';        /* Required for pseudo-elements to appear */
     position: absolute;
     bottom: -4px;
     left: 0;
-    width: 0;
+    width: 0;           /* Hidden by default */
     height: 1.5px;
     background: var(--gradient-accent);
     transition: width var(--duration-base) var(--ease-smooth);
 }
 
 .nav-link:hover::after {
-    width: 100%;
+    width: 100%; /* Slides in from left */
 }
 
-/* Mobile menu toggle */
+/* ── Mobile hamburger menu button ──
+   Hidden on desktop, shown on mobile via the @media query below */
 .nav-toggle {
     display: none;
     flex-direction: column;
@@ -112,6 +156,7 @@ body {
     padding: var(--space-2);
 }
 
+/* The three horizontal lines of the hamburger icon */
 .nav-toggle span {
     display: block;
     width: 20px;
@@ -120,27 +165,35 @@ body {
     transition: all var(--duration-base) var(--ease-smooth);
 }
 
-/* ── Hero Section ── */
+
+/* ═══════════════════════════════════════════════
+   3. HERO SECTION
+   The full-screen landing section at the top of the homepage.
+   min-height: 100vh makes it at least the full screen height.
+   padding-top accounts for the fixed nav bar above it.
+   ═══════════════════════════════════════════════ */
 
 .hero {
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    padding-top: var(--nav-height);
+    align-items: center;            /* Vertically centre the content */
+    padding-top: var(--nav-height); /* Push content below the fixed nav */
 }
 
+/* Two-column grid: text on left, 3D canvas on right */
 .hero-inner {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-16);
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: var(--space-16);           /* 64px gap between columns */
     align-items: center;
     width: 100%;
 }
 
 .hero-content {
-    max-width: 560px;
+    max-width: 560px; /* Keeps text from becoming too wide to read */
 }
 
+/* The small "Built by Pratham Oza" pill above the heading */
 .hero-tag {
     display: inline-flex;
     align-items: center;
@@ -153,30 +206,35 @@ body {
     margin-bottom: var(--space-6);
     padding: var(--space-2) var(--space-4);
     background: var(--gradient-subtle);
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-full); /* Pill shape */
     border: 1px solid rgba(122, 99, 255, 0.1);
 }
 
+/* The glowing dot before the hero tag text */
 .hero-tag::before {
     content: '';
     width: 6px;
     height: 6px;
-    border-radius: 50%;
+    border-radius: 50%; /* Perfect circle */
     background: var(--accent-purple);
-    box-shadow: 0 0 8px rgba(122, 99, 255, 0.5);
+    box-shadow: 0 0 8px rgba(122, 99, 255, 0.5); /* Purple glow */
 }
 
 .hero-title {
     font-family: var(--font-display);
     font-size: var(--text-6xl);
     font-weight: 400;
-    line-height: 1.0;
+    line-height: 1.0;               /* Tight line height for big display text */
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--text-primary);
     margin-bottom: var(--space-6);
 }
 
+/* The gradient text on "Poza's Den" in the hero title.
+   background-clip: text clips the gradient to the text shape.
+   -webkit-text-fill-color: transparent hides the default text colour
+   so only the gradient background shows through. */
 .hero-title .accent {
     background: var(--gradient-accent);
     -webkit-background-clip: text;
@@ -192,20 +250,57 @@ body {
     max-width: 480px;
 }
 
+/* Row of CTA buttons below the description */
 .hero-cta {
     display: flex;
     gap: var(--space-4);
     align-items: center;
 }
 
-/* Buttons */
+/* Container for the 3D Three.js canvas */
+.hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* The div that Three.js renders its <canvas> into */
+#threeHeroCanvas {
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1;    /* Forces a 1:1 square regardless of width */
+    position: relative;
+    margin: 0 auto;
+    cursor: grab;       /* Shows a "grab" cursor to hint the user can drag it */
+    z-index: 10;
+}
+
+#threeHeroCanvas:active {
+    cursor: grabbing; /* Changes to closed hand while dragging */
+}
+
+/* Override Three.js inline styles to make the canvas fill its container */
+#threeHeroCanvas canvas {
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
+}
+
+
+/* ═══════════════════════════════════════════════
+   4. BUTTONS
+   .btn is the base — shared by all buttons.
+   .btn-primary and .btn-secondary are the two variants.
+   ═══════════════════════════════════════════════ */
+
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
     padding: var(--space-3) var(--space-8);
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-full); /* Pill shape */
     font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 500;
@@ -215,6 +310,7 @@ body {
     transition: all var(--duration-base) var(--ease-smooth);
 }
 
+/* Filled gradient button — used for the primary action */
 .btn-primary {
     background: var(--gradient-accent);
     color: #ffffff;
@@ -222,10 +318,11 @@ body {
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(122, 99, 255, 0.35);
+    transform: translateY(-2px);                       /* Lifts up slightly */
+    box-shadow: 0 8px 30px rgba(122, 99, 255, 0.35);  /* Stronger glow on hover */
 }
 
+/* Ghost/outline button — used for secondary actions */
 .btn-secondary {
     background: transparent;
     color: var(--text-primary);
@@ -238,45 +335,24 @@ body {
     transform: translateY(-2px);
 }
 
-/* Hero Visual */
-.hero-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
 
-#threeHeroCanvas {
-    width: 100%;
-    max-width: 450px;
-    aspect-ratio: 1;
-    position: relative;
-    margin: 0 auto;
-    cursor: grab;
-    z-index: 10;
-}
-
-#threeHeroCanvas:active {
-    cursor: grabbing;
-}
-
-#threeHeroCanvas canvas {
-    width: 100% !important;
-    height: 100% !important;
-    outline: none;
-}
-
-/* ── Sections ── */
+/* ═══════════════════════════════════════════════
+   5. SECTIONS
+   Shared layout used by Experience, Projects, etc.
+   Each section has a header (label + title + description)
+   and then its content below.
+   ═══════════════════════════════════════════════ */
 
 .section {
-    padding: var(--space-32) 0;
+    padding: var(--space-32) 0; /* 128px top/bottom breathing room */
     position: relative;
 }
 
 .section-header {
-    margin-bottom: var(--space-16);
+    margin-bottom: var(--space-16); /* Space between header and cards */
 }
 
+/* Small uppercase label above the section title (e.g. "PROFESSIONAL") */
 .section-label {
     display: inline-flex;
     align-items: center;
@@ -289,6 +365,7 @@ body {
     margin-bottom: var(--space-4);
 }
 
+/* Short decorative line before the label text */
 .section-label::before {
     content: '';
     width: 24px;
@@ -310,14 +387,19 @@ body {
     font-size: var(--text-lg);
     color: var(--text-secondary);
     line-height: var(--leading-relaxed);
-    max-width: 560px;
+    max-width: 560px; /* Keeps description at a readable line length */
 }
 
-/* ── Work Cards ── */
+
+/* ═══════════════════════════════════════════════
+   6. WORK CARDS
+   Two-column grid of cards used for Experience and Projects.
+   Each card lifts and glows on hover.
+   ═══════════════════════════════════════════════ */
 
 .work-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
     gap: var(--space-8);
 }
 
@@ -329,34 +411,40 @@ body {
     transition: all var(--duration-slow) var(--ease-smooth);
     cursor: pointer;
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* Clips the ::before glow to the card's rounded corners */
 }
 
+/* Invisible glow layer that fades in on hover using ::before pseudo-element */
 .work-card::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: 0; /* Shorthand for top/right/bottom/left: 0 — fills the card */
     background: var(--gradient-glow);
-    opacity: 0;
+    opacity: 0; /* Hidden by default */
     transition: opacity var(--duration-slow) var(--ease-smooth);
     z-index: 0;
 }
 
 .work-card:hover {
     border-color: rgba(91, 76, 255, 0.3);
-    box-shadow: 0 0 30px rgba(91, 76, 255, 0.2), 0 0 60px rgba(122, 99, 255, 0.15), 0 0 20px rgba(79, 125, 245, 0.1);
-    transform: translateY(-4px);
+    /* Multi-layered glow shadow */
+    box-shadow: 0 0 30px rgba(91, 76, 255, 0.2),
+                0 0 60px rgba(122, 99, 255, 0.15),
+                0 0 20px rgba(79, 125, 245, 0.1);
+    transform: translateY(-4px); /* Lifts card up */
 }
 
 .work-card:hover::before {
-    opacity: 1;
+    opacity: 1; /* Shows the glow layer */
 }
 
+/* z-index: 1 puts the content above the ::before glow layer */
 .work-card-content {
     position: relative;
     z-index: 1;
 }
 
+/* Small emoji icon box at the top of each card */
 .work-card-icon {
     width: 48px;
     height: 48px;
@@ -386,13 +474,15 @@ body {
     margin-bottom: var(--space-6);
 }
 
+/* Flex row of tag pills at the bottom of a card */
 .work-card-tags {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Wraps to next line if there are too many tags */
     gap: var(--space-2);
     margin-bottom: var(--space-6);
 }
 
+/* Individual tag pill */
 .tag {
     font-size: var(--text-xs);
     font-weight: 500;
@@ -403,6 +493,7 @@ body {
     border: 1px solid var(--border);
 }
 
+/* "Learn more →" link at the bottom of a card */
 .work-card-link {
     display: inline-flex;
     align-items: center;
@@ -414,7 +505,7 @@ body {
 }
 
 .work-card-link:hover {
-    gap: var(--space-3);
+    gap: var(--space-3); /* Gap widens slightly — gives the arrow space to move */
 }
 
 .work-card-link .arrow {
@@ -422,15 +513,21 @@ body {
 }
 
 .work-card-link:hover .arrow {
-    transform: translateX(4px);
+    transform: translateX(4px); /* Arrow slides right on hover */
 }
 
-/* ── Thinking Section ── */
+
+/* ═══════════════════════════════════════════════
+   7. THINKING / LIST ITEMS
+   Used for Awards, Education, and My Life sections.
+   A vertical list with a top border on the first item
+   and bottom borders on each item.
+   ═══════════════════════════════════════════════ */
 
 .thinking-list {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0; /* Items touch — borders create separation instead */
 }
 
 .thinking-item {
@@ -443,20 +540,23 @@ body {
     transition: all var(--duration-base) var(--ease-smooth);
 }
 
+/* Top border only on the very first item */
 .thinking-item:first-child {
     border-top: 1px solid var(--border);
 }
 
+/* On hover, the item slides right slightly for a tactile feel */
 .thinking-item:hover {
     padding-left: var(--space-4);
 }
 
+/* Title colour shifts to purple on hover */
 .thinking-item:hover .thinking-title {
     color: var(--accent-purple);
 }
 
 .thinking-content {
-    flex: 1;
+    flex: 1; /* Takes up all available space, pushing the arrow to the right */
 }
 
 .thinking-title {
@@ -476,20 +576,25 @@ body {
     line-height: var(--leading-normal);
 }
 
+/* The → arrow on the right side of each list item */
 .thinking-arrow {
     font-size: var(--text-lg);
     color: var(--text-muted);
     transition: all var(--duration-base) var(--ease-smooth);
     margin-left: var(--space-8);
-    flex-shrink: 0;
+    flex-shrink: 0; /* Prevents the arrow from shrinking if the title is long */
 }
 
 .thinking-item:hover .thinking-arrow {
     color: var(--accent-purple);
-    transform: translateX(4px);
+    transform: translateX(4px); /* Arrow nudges right on hover */
 }
 
-/* ── Contact Section ── */
+
+/* ═══════════════════════════════════════════════
+   8. CONTACT SECTION
+   Centred call-to-action at the bottom of the homepage.
+   ═══════════════════════════════════════════════ */
 
 .contact {
     text-align: center;
@@ -505,7 +610,7 @@ body {
     color: var(--text-primary);
     margin-bottom: var(--space-4);
     max-width: 600px;
-    margin-left: auto;
+    margin-left: auto;  /* Combined with margin-right: auto — centres the element */
     margin-right: auto;
 }
 
@@ -517,13 +622,15 @@ body {
     margin: 0 auto var(--space-10);
 }
 
+/* Row of LinkedIn / Email / Twitter buttons */
 .contact-links {
     display: flex;
     gap: var(--space-4);
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Wraps to next line on small screens */
 }
 
+/* Individual contact button (outline style) */
 .contact-btn {
     display: inline-flex;
     align-items: center;
@@ -544,7 +651,12 @@ body {
     transform: translateY(-2px);
 }
 
-/* ── Footer ── */
+
+/* ═══════════════════════════════════════════════
+   9. FOOTER
+   Simple bar at the very bottom with copyright text
+   and quick nav links.
+   ═══════════════════════════════════════════════ */
 
 .footer {
     padding: var(--space-8) 0;
@@ -553,7 +665,7 @@ body {
 
 .footer-inner {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Copyright on left, links on right */
     align-items: center;
 }
 
@@ -562,6 +674,7 @@ body {
     color: var(--text-muted);
 }
 
+/* Row of footer nav links */
 .footer-links {
     display: flex;
     gap: var(--space-6);
@@ -577,37 +690,41 @@ body {
     color: var(--text-secondary);
 }
 
-/* ── Scroll Reveal ── */
+
+/* ═══════════════════════════════════════════════
+   10. SCROLL REVEAL ANIMATION
+   Elements start invisible (opacity 0) and shifted down (translateY 24px).
+   When JS adds the "visible" class, they fade+slide into position.
+   reveal-delay-1/2/3/4 stagger the animation so cards don't all
+   appear at exactly the same time.
+   ═══════════════════════════════════════════════ */
 
 .reveal {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity var(--duration-slow) var(--ease-smooth),
-        transform var(--duration-slow) var(--ease-smooth);
+    transform: translateY(24px); /* Starts 24px below its final position */
+    transition: opacity   var(--duration-slow) var(--ease-smooth),
+                transform var(--duration-slow) var(--ease-smooth);
 }
 
 .reveal.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0); /* Slides up to final position */
 }
 
-.reveal-delay-1 {
-    transition-delay: 100ms;
-}
+/* Stagger delays — each card animates a bit later than the previous */
+.reveal-delay-1 { transition-delay: 100ms; }
+.reveal-delay-2 { transition-delay: 200ms; }
+.reveal-delay-3 { transition-delay: 300ms; }
+.reveal-delay-4 { transition-delay: 400ms; }
 
-.reveal-delay-2 {
-    transition-delay: 200ms;
-}
 
-.reveal-delay-3 {
-    transition-delay: 300ms;
-}
-
-.reveal-delay-4 {
-    transition-delay: 400ms;
-}
-
-/* ── Particle Background ── */
+/* ═══════════════════════════════════════════════
+   11. PARTICLE BACKGROUND CANVAS
+   The <canvas> element that shows floating particles.
+   position: fixed keeps it in place as the page scrolls.
+   z-index: -1 puts it behind everything else.
+   pointer-events: none means clicks pass straight through it.
+   ═══════════════════════════════════════════════ */
 
 #particleBg {
     position: fixed;
@@ -619,13 +736,23 @@ body {
     pointer-events: none;
 }
 
-/* ── Responsive ── */
+
+/* ═══════════════════════════════════════════════
+   12. RESPONSIVE — MOBILE
+   At 768px and below (phones and small tablets),
+   we switch from desktop layouts to single-column stacks.
+   ═══════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
+
+    /* Reduce side padding on small screens */
     .container {
         padding: 0 var(--space-5);
     }
 
+    /* On mobile, the nav links become a full-screen overlay menu.
+       They're hidden by default (display: none) and shown when
+       JS adds the .active class. */
     .nav-links {
         display: none;
         position: fixed;
@@ -642,23 +769,25 @@ body {
     }
 
     .nav-links.active {
-        display: flex;
+        display: flex; /* JS toggles this class to open the menu */
     }
 
     .nav-link {
-        font-size: var(--text-xl);
+        font-size: var(--text-xl); /* Bigger tap targets on mobile */
     }
 
     .nav-toggle {
-        display: flex;
+        display: flex; /* Show the hamburger button on mobile */
     }
 
+    /* Hero: remove full-screen height on mobile */
     .hero {
         min-height: auto;
         padding-top: calc(var(--nav-height) + var(--space-12));
         padding-bottom: var(--space-12);
     }
 
+    /* Switch hero from 2 columns to 1 column stacked */
     .hero-inner {
         grid-template-columns: 1fr;
         gap: var(--space-12);
@@ -671,7 +800,7 @@ body {
 
     .hero-tag {
         margin-left: auto;
-        margin-right: auto;
+        margin-right: auto; /* Re-centres the pill in single-column layout */
     }
 
     .hero-description {
@@ -682,6 +811,7 @@ body {
         justify-content: center;
     }
 
+    /* Move the 3D canvas above the text on mobile */
     .hero-visual {
         order: -1;
     }
@@ -691,13 +821,15 @@ body {
     }
 
     .section {
-        padding: var(--space-20) 0;
+        padding: var(--space-20) 0; /* Less vertical padding on mobile */
     }
 
+    /* Switch work cards from 2 columns to 1 */
     .work-grid {
         grid-template-columns: 1fr;
     }
 
+    /* Stack thinking items vertically on mobile */
     .thinking-item {
         flex-direction: column;
         align-items: flex-start;
@@ -717,6 +849,7 @@ body {
         align-items: center;
     }
 
+    /* Stack footer copyright and links vertically */
     .footer-inner {
         flex-direction: column;
         gap: var(--space-4);
@@ -724,6 +857,7 @@ body {
     }
 }
 
+/* At very small screens (phones in portrait), make CTA buttons full-width */
 @media (max-width: 480px) {
     .hero-cta {
         flex-direction: column;
@@ -736,17 +870,25 @@ body {
     }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
 
+/* ═══════════════════════════════════════════════
+   13. REDUCED MOTION ACCESSIBILITY
+   Some users have "Reduce Motion" enabled in their OS settings
+   (common for people with vestibular disorders or motion sensitivity).
+   This block disables all animations and transitions for those users.
+   ═══════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;        /* Effectively instant */
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
 
+    /* Also make all reveal elements immediately visible
+       so they don't stay hidden when animations are disabled */
     .reveal {
         opacity: 1;
         transform: none;

@@ -1,137 +1,226 @@
 /*
- * Design Tokens
- * Ultra-Minimal Atomic Portfolio
+ * tokens.css — Design Tokens
+ *
+ * "Design tokens" are named variables for every visual value in the site —
+ * colours, font sizes, spacing, shadows, etc.
+ *
+ * Instead of typing the same hex colour "#7a63ff" 30 times across your CSS,
+ * you define it once here as --accent-purple and use that name everywhere.
+ * When you want to change the colour, you change it in ONE place.
+ *
+ * CSS custom properties (variables) always start with -- and live inside
+ * :root which means they're available everywhere on the page.
  */
 
+
+/* ─────────────────────────────────────────────
+   GOOGLE FONTS IMPORT
+   We load two fonts from Google Fonts:
+   - Anton: bold display font used for headings
+   - Inter: clean, readable font used for body text
+   display=swap means text shows in a fallback font immediately
+   and swaps to the custom font once it's downloaded.
+   ───────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&display=swap');
 
+
+/* ─────────────────────────────────────────────
+   LIGHT MODE TOKENS (DEFAULT)
+   These are the values used when the site is in light mode.
+   Dark mode overrides are at the bottom of this file.
+   ───────────────────────────────────────────── */
 :root {
-    /* ── Colors ── */
-    --bg: #ffffff;
-    --bg-subtle: #f8f9fa;
-    --bg-card: #ffffff;
-    --nav-bg-glass: rgba(255, 255, 255, 0.7);
-    --nav-scrolled-bg-glass: rgba(255, 255, 255, 0.9);
 
-    --text-primary: #111111;
-    --text-secondary: #555555;
-    --text-tertiary: #999999;
-    --text-muted: #bbbbbb;
+    /* ── Background Colours ──
+       --bg is the main page background (white).
+       --bg-subtle is a very slightly off-white used for sections.
+       --bg-card is the background for individual cards.
+       The "glass" variants are semi-transparent versions used
+       for the navigation bar (blurred glass effect). */
+    --bg:                     #ffffff;
+    --bg-subtle:              #f8f9fa;
+    --bg-card:                #ffffff;
+    --nav-bg-glass:           rgba(255, 255, 255, 0.7);  /* Nav bar when at top of page */
+    --nav-scrolled-bg-glass:  rgba(255, 255, 255, 0.9);  /* Nav bar after scrolling */
 
-    --accent-cyan: #74e0ef;
+    /* ── Text Colours ──
+       Four levels of text colour from darkest to most faded. */
+    --text-primary:   #111111; /* Main headings and important text */
+    --text-secondary: #555555; /* Body descriptions */
+    --text-tertiary:  #999999; /* Less important info */
+    --text-muted:     #bbbbbb; /* Timestamps, placeholders */
+
+    /* ── Accent Colours ──
+       The brand palette. Cyan, purple, blue, and indigo are
+       used for glows, tags, hover states, and gradient effects. */
+    --accent-cyan:   #74e0ef;
     --accent-purple: #7a63ff;
-    --accent-blue: #4f7df5;
+    --accent-blue:   #4f7df5;
     --accent-indigo: #5b4cff;
 
-    --gradient-accent: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple), var(--accent-cyan));
+    /* ── Gradients ──
+       CSS gradients blend two or more colours at an angle.
+       135deg means diagonal (top-left to bottom-right).
+       These are used on buttons, text accents, and card glows. */
+    --gradient-accent:      linear-gradient(135deg, var(--accent-indigo), var(--accent-purple), var(--accent-cyan));
     --gradient-purple-blue: linear-gradient(135deg, #5b4cff, #4f7df5, #74e0ef);
-    --gradient-subtle: linear-gradient(135deg, rgba(91, 76, 255, 0.08), rgba(122, 99, 255, 0.06), rgba(116, 224, 239, 0.06));
-    --gradient-glow: linear-gradient(135deg, rgba(122, 99, 255, 0.15), rgba(116, 224, 239, 0.15));
+    --gradient-subtle:      linear-gradient(135deg, rgba(91, 76, 255, 0.08), rgba(122, 99, 255, 0.06), rgba(116, 224, 239, 0.06)); /* Very faint purple tint */
+    --gradient-glow:        linear-gradient(135deg, rgba(122, 99, 255, 0.15), rgba(116, 224, 239, 0.15)); /* Card hover glow */
 
-    --border: rgba(0, 0, 0, 0.06);
-    --border-hover: rgba(0, 0, 0, 0.12);
+    /* ── Border Colours ──
+       Borders are semi-transparent black so they look good on
+       both white and off-white backgrounds. */
+    --border:       rgba(0, 0, 0, 0.06); /* Default border — very subtle */
+    --border-hover: rgba(0, 0, 0, 0.12); /* Slightly darker on hover */
 
-    /* ── Typography ── */
+
+    /* ── Typography ──
+       --font-display is used for big headings (Anton).
+       --font-body is the system font stack — it picks the best
+       native font on each device (SF Pro on Apple, Segoe on Windows, etc.)
+       falling back to Inter if nothing else is available. */
     --font-display: 'Anton', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    --font-body:    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 
-    --text-xs: 0.75rem;
-    --text-sm: 0.875rem;
-    --text-base: 1rem;
-    --text-lg: 1.125rem;
-    --text-xl: 1.25rem;
-    --text-2xl: 1.5rem;
-    --text-3xl: 2rem;
-    --text-4xl: 2.75rem;
-    --text-5xl: 3.5rem;
-    --text-6xl: 4.5rem;
+    /* Font size scale — rem units are relative to the root font size (usually 16px).
+       So --text-sm: 0.875rem = 14px, --text-base: 1rem = 16px, etc. */
+    --text-xs:   0.75rem;   /*  12px — labels, tags */
+    --text-sm:   0.875rem;  /*  14px — nav links, small captions */
+    --text-base: 1rem;      /*  16px — body text */
+    --text-lg:   1.125rem;  /*  18px — slightly larger body */
+    --text-xl:   1.25rem;   /*  20px — sub-headings */
+    --text-2xl:  1.5rem;    /*  24px — card titles */
+    --text-3xl:  2rem;      /*  32px */
+    --text-4xl:  2.75rem;   /*  44px — section titles */
+    --text-5xl:  3.5rem;    /*  56px */
+    --text-6xl:  4.5rem;    /*  72px — hero title */
 
-    --leading-tight: 1.1;
-    --leading-snug: 1.3;
-    --leading-normal: 1.6;
-    --leading-relaxed: 1.8;
+    /* Line height — controls spacing between lines of text */
+    --leading-tight:   1.1; /* Very tight, for big display text */
+    --leading-snug:    1.3;
+    --leading-normal:  1.6; /* Comfortable reading */
+    --leading-relaxed: 1.8; /* Spacious, for hero descriptions */
 
-    --tracking-tight: -0.03em;
-    --tracking-normal: 0;
-    --tracking-wide: 0.02em;
-    --tracking-wider: 0.08em;
+    /* Letter spacing — controls space between individual characters.
+       Negative values tighten letters, positive values spread them. */
+    --tracking-tight:  -0.03em; /* Tighter than normal — big headings look better tight */
+    --tracking-normal:  0;
+    --tracking-wide:    0.02em;
+    --tracking-wider:   0.08em; /* Spread out — used for small uppercase labels */
 
-    /* ── Spacing (8px base) ── */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-5: 1.25rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
-    --space-10: 2.5rem;
-    --space-12: 3rem;
-    --space-16: 4rem;
-    --space-20: 5rem;
-    --space-24: 6rem;
-    --space-32: 8rem;
-    --space-40: 10rem;
-    --space-48: 12rem;
 
-    /* ── Shadows ── */
+    /* ── Spacing Scale (8px base) ──
+       All spacing uses multiples of 8px for visual consistency.
+       1rem = 16px, so --space-4 = 1rem = 16px = 2 × 8px. */
+    --space-1:  0.25rem;  /*  4px */
+    --space-2:  0.5rem;   /*  8px */
+    --space-3:  0.75rem;  /* 12px */
+    --space-4:  1rem;     /* 16px */
+    --space-5:  1.25rem;  /* 20px */
+    --space-6:  1.5rem;   /* 24px */
+    --space-8:  2rem;     /* 32px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-16: 4rem;     /* 64px */
+    --space-20: 5rem;     /* 80px */
+    --space-24: 6rem;     /* 96px */
+    --space-32: 8rem;     /* 128px */
+    --space-40: 10rem;    /* 160px */
+    --space-48: 12rem;    /* 192px */
+
+
+    /* ── Box Shadows ──
+       Shadows give elements depth. Multiple comma-separated
+       shadows layer on top of each other for a softer effect. */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
     --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.08);
 
-    --glow-cyan: 0 0 30px rgba(116, 224, 239, 0.2), 0 0 60px rgba(116, 224, 239, 0.1);
-    --glow-purple: 0 0 30px rgba(122, 99, 255, 0.2), 0 0 60px rgba(122, 99, 255, 0.1);
-    --glow-mixed: 0 0 30px rgba(122, 99, 255, 0.15), 0 0 30px rgba(116, 224, 239, 0.15);
+    /* Glows — coloured shadows used for purple/cyan hover effects */
+    --glow-cyan:   0 0 30px rgba(116, 224, 239, 0.2), 0 0 60px rgba(116, 224, 239, 0.1);
+    --glow-purple: 0 0 30px rgba(122, 99, 255, 0.2),  0 0 60px rgba(122, 99, 255, 0.1);
+    --glow-mixed:  0 0 30px rgba(122, 99, 255, 0.15), 0 0 30px rgba(116, 224, 239, 0.15);
 
-    /* ── Borders ── */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-    --radius-full: 9999px;
 
-    /* ── Transitions ── */
-    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-    --duration-fast: 150ms;
-    --duration-base: 300ms;
-    --duration-slow: 500ms;
+    /* ── Border Radius ──
+       Controls how rounded the corners of elements are.
+       --radius-full: 9999px makes a perfect pill/circle shape. */
+    --radius-sm:   8px;
+    --radius-md:   12px;
+    --radius-lg:   16px;
+    --radius-xl:   24px;
+    --radius-full: 9999px; /* Used for pills, buttons, tags */
 
-    /* ── Layout ── */
-    --container-max: 1200px;
+
+    /* ── Transitions ──
+       Controls how smoothly CSS properties animate.
+       cubic-bezier is a custom easing curve (how fast/slow the animation accelerates).
+       --ease-spring has a slight overshoot bounce effect. */
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);          /* Standard smooth */
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);     /* Bouncy spring effect */
+    --duration-fast: 150ms;  /* Very quick — hover colour changes */
+    --duration-base: 300ms;  /* Default — most hover effects */
+    --duration-slow: 500ms;  /* Slower — card entrance animations */
+
+
+    /* ── Layout ──
+       --container-max caps the content width so long text lines
+       don't stretch across a wide monitor (hard to read).
+       --nav-height is used in multiple places to offset page content
+       so it doesn't hide behind the fixed nav bar. */
+    --container-max:    1200px;
     --container-narrow: 800px;
-    --nav-height: 72px;
+    --nav-height:       72px;
 }
 
-/* Responsive Typography */
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE TYPOGRAPHY
+   On small screens (≤ 768px) we scale down the large font sizes
+   so headings don't overflow or look overwhelming on mobile.
+   ───────────────────────────────────────────── */
 @media (max-width: 768px) {
     :root {
-        --text-4xl: 2rem;
-        --text-5xl: 2.5rem;
-        --text-6xl: 3rem;
-        --nav-height: 60px;
+        --text-4xl: 2rem;    /* Section titles shrink from 44px to 32px */
+        --text-5xl: 2.5rem;  /* 40px on mobile */
+        --text-6xl: 3rem;    /* Hero title shrinks from 72px to 48px */
+        --nav-height: 60px;  /* Slightly shorter nav on mobile */
     }
 }
 
-/* ── Dark Mode Overrides ── */
+
+/* ─────────────────────────────────────────────
+   DARK MODE OVERRIDES
+   When the user switches to dark mode, JavaScript sets
+   data-theme="dark" on the <html> element.
+   This block overrides only the colour tokens —
+   everything else (spacing, fonts, etc.) stays the same.
+   ───────────────────────────────────────────── */
 [data-theme="dark"] {
-    --bg: #0a0a0f;
+
+    /* Dark backgrounds */
+    --bg:       #0a0a0f; /* Very dark near-black */
     --bg-subtle: #12121a;
-    --bg-card: #181822;
+    --bg-card:  #181822;
 
-    --text-primary: #f2f2f2;
+    /* Light text on dark backgrounds */
+    --text-primary:   #f2f2f2; /* Almost white */
     --text-secondary: #a0a0b0;
-    --text-tertiary: #666677;
-    --text-muted: #444455;
+    --text-tertiary:  #666677;
+    --text-muted:     #444455;
 
-    --border: rgba(255, 255, 255, 0.08);
+    /* Lighter, more visible borders in dark mode */
+    --border:       rgba(255, 255, 255, 0.08);
     --border-hover: rgba(255, 255, 255, 0.15);
 
-    --nav-bg-glass: rgba(10, 10, 15, 0.7);
+    /* Dark nav glass */
+    --nav-bg-glass:          rgba(10, 10, 15, 0.7);
     --nav-scrolled-bg-glass: rgba(10, 10, 15, 0.9);
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+    /* Stronger shadows in dark mode so elements still feel elevated */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2),  0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4),  0 1px 3px rgba(0, 0, 0, 0.2);
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
     --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.6);
 }

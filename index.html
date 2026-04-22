@@ -2,9 +2,21 @@
 <html lang="en">
 
 <head>
+    <!-- charset tells the browser to use UTF-8 encoding
+         so special characters (₹, é, etc.) display correctly -->
     <meta charset="UTF-8">
+
+    <!-- viewport makes the page scale correctly on phones.
+         Without this, mobile browsers zoom out and show a tiny desktop page. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- The text that appears in the browser tab -->
     <title>Pratham Oza</title>
+
+    <!-- FOUC = Flash Of Unstyled Content.
+         Without this script, dark-mode users see a white flash before
+         the CSS loads. This tiny inline script runs before anything else
+         and immediately sets the dark theme if needed. -->
     <!-- Prevent FOUC for Dark Mode -->
     <script>
         (function () {
@@ -16,37 +28,50 @@
             } catch (e) { }
         })();
     </script>
+    <!-- Description shown in Google search results under the page title -->
     <meta name="description"
         content="Designing AI-powered experimentation infrastructure for modern companies. Product & Growth leader specializing in AI, performance marketing, and Web3.">
     <meta name="author" content="Pratham Oza">
 
-    <!-- Open Graph -->
+    <!-- Open Graph tags control how this page looks when shared on
+         LinkedIn, Twitter, WhatsApp, Slack, etc.
+         og:title = bold heading in the preview card
+         og:description = text below the heading
+         og:type = "website" is standard for most pages -->
     <meta property="og:title" content="Built by Pratham Oza">
     <meta property="og:description" content="Vibing More, Coding Less || Computer Science @BITS, Pilani">
     <meta property="og:type" content="website">
 
-    <!-- Canonical -->
+    <!-- The canonical URL tells Google which URL is the "official" one
+         for this page, preventing duplicate content issues -->
     <link rel="canonical" href="https://poza.in">
 
-    <!-- Open Graph extras -->
+    <!-- og:url = the page URL to use in the share card
+         og:image = the preview image (1200×630px recommended)
+         og:image:width/height helps platforms render the image faster -->
     <meta property="og:url" content="https://poza.in">
     <meta property="og:image" content="https://poza.in/assets/images/og-banner.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
-    <!-- Twitter Card -->
+    <!-- Twitter-specific share card settings
+         summary_large_image = shows the full-width banner image -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@prathamoza">
     <meta name="twitter:image" content="https://poza.in/assets/images/og-banner.png">
 
-    <!-- Favicon -->
+    <!-- Favicon — the small icon shown in the browser tab -->
     <link rel="icon" href="/assets/images/poza-logo-transparent.svg" type="image/svg+xml">
 
-    <!-- Font preconnect -->
+    <!-- Preconnect opens a network connection to Google Fonts early
+         so fonts download faster when the CSS requests them -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Styles -->
+    <!-- Stylesheets — loaded in order:
+         1. reset.css  — clears browser default styles
+         2. tokens.css — defines colours, fonts, spacing variables
+         3. styles.css — all the actual component styles -->
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/tokens.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -433,7 +458,10 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Scripts loaded at the end of <body> so they don't block the page rendering.
+         Three.js = 3D graphics library (loaded from CDN — a fast public server)
+         OrbitControls = Three.js addon that lets the user drag to rotate the 3D scene
+         defer = script downloads in parallel but runs only after the HTML is fully parsed -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script defer src="/js/atoms.js"></script>

@@ -1,29 +1,72 @@
 /*
- * Modern CSS Reset
- * Ultra-Minimal Atomic Portfolio
+ * reset.css — CSS Reset
+ *
+ * Every browser (Chrome, Firefox, Safari) has its own default styles
+ * for elements like headings, paragraphs, lists, and links.
+ * Those defaults are inconsistent across browsers, so designers
+ * start with a "reset" to wipe them out and get a clean slate.
+ *
+ * This file is always loaded FIRST so the resets apply before
+ * any of our own styles are added.
  */
 
+
+/* ─────────────────────────────────────────────
+   BOX SIZING
+   By default, CSS "width" only counts the content area.
+   If you add padding or a border, the element becomes WIDER.
+   That's confusing. Setting box-sizing to "border-box" means
+   width includes padding and border — much more predictable.
+   The * selector applies this to every single element on the page.
+   ───────────────────────────────────────────── */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    margin: 0;   /* Remove default margins browsers add to headings, paragraphs, etc. */
+    padding: 0;  /* Remove default padding (e.g. ul padding-left) */
 }
 
+
+/* ─────────────────────────────────────────────
+   HTML ROOT
+   smooth scrolling — when you click a link like #contact,
+   the page scrolls smoothly instead of jumping instantly.
+
+   The font smoothing rules improve how text looks on
+   macOS / iOS screens by using anti-aliasing.
+
+   text-rendering: optimizeLegibility — tells the browser to
+   prioritise kerning and ligatures for better-looking text.
+   ───────────────────────────────────────────── */
 html {
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;         /* Prevent iOS from auto-enlarging text on rotation */
+    -webkit-font-smoothing: antialiased;    /* Smoother fonts on macOS/iOS (Chrome/Safari) */
+    -moz-osx-font-smoothing: grayscale;     /* Smoother fonts on macOS (Firefox) */
+    text-rendering: optimizeLegibility;     /* Better kerning and ligatures */
 }
 
+
+/* ─────────────────────────────────────────────
+   BODY
+   min-height: 100vh makes sure the body is always at least
+   the full height of the browser window, even on short pages.
+   line-height: 1.6 sets comfortable reading spacing.
+   ───────────────────────────────────────────── */
 body {
-    min-height: 100vh;
-    line-height: 1.6;
+    min-height: 100vh; /* vh = viewport height — 100vh = full screen height */
+    line-height: 1.6;  /* Space between lines of text */
 }
 
+
+/* ─────────────────────────────────────────────
+   MEDIA ELEMENTS
+   By default inline elements (like <img>) can have a small gap
+   below them because they sit on the text baseline.
+   display: block removes that gap.
+   max-width: 100% prevents images from overflowing their container.
+   ───────────────────────────────────────────── */
 img,
 picture,
 video,
@@ -33,6 +76,13 @@ svg {
     max-width: 100%;
 }
 
+
+/* ─────────────────────────────────────────────
+   FORM ELEMENTS
+   By default buttons, inputs etc. don't inherit the page's font —
+   they use the browser's ugly system font instead.
+   font: inherit fixes that.
+   ───────────────────────────────────────────── */
 input,
 button,
 textarea,
@@ -40,26 +90,47 @@ select {
     font: inherit;
 }
 
+
+/* ─────────────────────────────────────────────
+   LINKS
+   Browsers underline links and colour them blue by default.
+   We remove both here and style them manually in styles.css.
+   ───────────────────────────────────────────── */
 a {
-    text-decoration: none;
-    color: inherit;
+    text-decoration: none; /* Remove underline */
+    color: inherit;        /* Use the parent element's text colour instead of browser blue */
 }
 
+
+/* ─────────────────────────────────────────────
+   LISTS
+   Browsers show bullet points (•) for <ul> and numbers for <ol>.
+   We remove them here since we style our own lists manually.
+   ───────────────────────────────────────────── */
 ul,
 ol {
     list-style: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+
+/* ─────────────────────────────────────────────
+   HEADINGS (h1–h6)
+   overflow-wrap: break-word — if a very long word (e.g. a URL)
+   can't fit on one line, it wraps instead of overflowing.
+   line-height: 1.2 — tighter line spacing for headings
+   looks more professional than body text spacing.
+   ───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
     line-height: 1.2;
 }
 
+
+/* ─────────────────────────────────────────────
+   PARAGRAPHS
+   Same overflow fix as headings — long unbreakable words
+   wrap instead of spilling outside their container.
+   ───────────────────────────────────────────── */
 p {
     overflow-wrap: break-word;
 }
