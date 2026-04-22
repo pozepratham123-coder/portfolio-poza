@@ -53,16 +53,19 @@
 
         // Toggle the menu open/closed when ☰ is clicked
         navToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');  // CSS shows/hides the menu
+            const isOpen = navLinks.classList.toggle('active');  // CSS shows/hides the menu
             navToggle.classList.toggle('active'); // Animates the ☰ into an ✕
+            // Add/remove body class so CSS can hide WebGL canvases
+            // (WebGL bypasses z-index via GPU compositing and bleeds through overlays)
+            document.body.classList.toggle('menu-open', isOpen);
         });
 
         // Close the menu automatically when any nav link is clicked
-        // (so the menu doesn't stay open after the user navigates)
         navLinks.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
                 navToggle.classList.remove('active');
+                document.body.classList.remove('menu-open');
             });
         });
     }

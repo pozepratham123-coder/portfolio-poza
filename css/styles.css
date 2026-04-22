@@ -186,6 +186,8 @@ body {
     gap: 5px;
     cursor: pointer;
     padding: var(--space-2);
+    background: none;
+    border: none;
 }
 
 /* The three horizontal lines of the hamburger icon */
@@ -797,7 +799,9 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 999; /* Above page content, just below the nav bar */
+        /* z-index must be above the nav (1000) AND above WebGL canvases
+           which bypass normal CSS stacking due to GPU compositing */
+        z-index: 9999;
 
         /* Glassy background — more opaque than the nav bar so links are readable */
         background: rgba(255, 255, 255, 0.88);
@@ -962,8 +966,16 @@ body {
 /* Dark mode override for the mobile overlay background */
 @media (max-width: 768px) {
     [data-theme="dark"] .nav-links {
-        background: rgba(10, 10, 15, 0.92);
+        background: rgba(10, 10, 15, 0.96);
         border-top: 1px solid rgba(122, 99, 255, 0.2);
+    }
+
+    /* Hide the WebGL canvas when the mobile menu is open.
+       WebGL canvases bypass CSS z-index via GPU compositing,
+       so we hide the canvas entirely to prevent bleed-through. */
+    body.menu-open #threeHeroCanvas,
+    body.menu-open #particleBg {
+        visibility: hidden;
     }
 }
 
