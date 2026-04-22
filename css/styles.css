@@ -776,45 +776,63 @@ body {
 @media (max-width: 768px) {
 
     .container {
-        padding: 0 var(--space-5);
+        padding: 0 var(--space-4);
+    }
+
+    /* ── Nav bar inner layout on mobile ──
+       Tighter padding so logo + theme toggle + hamburger all fit */
+    .nav-inner {
+        padding: 0 var(--space-4);
     }
 
     /* ── Mobile nav overlay ──
-       The links slide down as a glassy full-screen overlay.
-       The theme toggle stays in the nav bar (outside this overlay). */
+       IMPORTANT: We never use display:none here because CSS transitions
+       cannot animate across display changes. Instead we keep display:flex
+       always, and use visibility + opacity + pointer-events to show/hide.
+       This lets the fade + slide animation work properly. */
     .nav-links {
-        display: none;
+        /* Full-screen overlay below the nav bar */
         position: fixed;
         top: var(--nav-height);
         left: 0;
         right: 0;
         bottom: 0;
-        /* Same glass recipe as the nav bar */
-        background: var(--nav-scrolled-bg-glass);
-        backdrop-filter: blur(32px) saturate(180%);
-        -webkit-backdrop-filter: blur(32px) saturate(180%);
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        z-index: 999; /* Above page content, just below the nav bar */
+
+        /* Glassy background — more opaque than the nav bar so links are readable */
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(40px) saturate(200%);
+        -webkit-backdrop-filter: blur(40px) saturate(200%);
+        border-top: 1px solid rgba(122, 99, 255, 0.15);
+
+        /* Stack links vertically and centre them */
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: var(--space-8);
-        /* Smooth slide-in */
+        gap: var(--space-6);
+
+        /* HIDDEN state — invisible but still in the layout so transitions work */
         opacity: 0;
-        transform: translateY(-8px);
-        transition: opacity var(--duration-base) var(--ease-smooth),
-                    transform var(--duration-base) var(--ease-smooth);
+        visibility: hidden;
         pointer-events: none;
+        transform: translateY(-12px);
+        transition: opacity 0.25s ease,
+                    transform 0.25s ease,
+                    visibility 0.25s;
     }
 
+    /* VISIBLE state — JS adds .active class */
     .nav-links.active {
-        display: flex;
         opacity: 1;
-        transform: translateY(0);
+        visibility: visible;
         pointer-events: auto;
+        transform: translateY(0);
     }
 
     .nav-link {
         font-size: var(--text-xl);
+        font-weight: 500;
+        color: var(--text-primary);
     }
 
     /* Show the hamburger button on mobile */
@@ -822,7 +840,7 @@ body {
         display: flex;
     }
 
-    /* Animate hamburger → X when menu is open */
+    /* Animate hamburger bars → X when menu is open */
     .nav-toggle.active span:nth-child(1) {
         transform: translateY(6.5px) rotate(45deg);
     }
@@ -938,6 +956,14 @@ body {
         flex-wrap: wrap;
         justify-content: center;
         gap: var(--space-4);
+    }
+}
+
+/* Dark mode override for the mobile overlay background */
+@media (max-width: 768px) {
+    [data-theme="dark"] .nav-links {
+        background: rgba(10, 10, 15, 0.92);
+        border-top: 1px solid rgba(122, 99, 255, 0.2);
     }
 }
 
