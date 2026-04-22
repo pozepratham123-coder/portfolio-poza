@@ -25,8 +25,26 @@
     <meta property="og:description" content="Designing AI-powered experimentation infrastructure for modern companies.">
     <meta property="og:type" content="website">
 
+    <!-- Canonical -->
+    <link rel="canonical" href="https://poza.in">
+
+    <!-- Open Graph extras -->
+    <meta property="og:url" content="https://poza.in">
+    <meta property="og:image" content="https://poza.in/assets/images/og-banner.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@prathamoza">
+    <meta name="twitter:image" content="https://poza.in/assets/images/og-banner.jpg">
+
     <!-- Favicon -->
-    <link rel="icon" href="/assets/images/poza-logo-transparent.svg" type="image/svg">
+    <link rel="icon" href="/assets/images/poza-logo-transparent.svg" type="image/svg+xml">
+
+    <!-- Font preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- Styles -->
     <link rel="stylesheet" href="/css/reset.css">
@@ -418,8 +436,24 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="/js/atoms.js"></script>
-    <script src="/js/main.js"></script>
+    <script defer src="/js/atoms.js"></script>
+    <script defer src="/js/main.js"></script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Pratham Oza",
+      "url": "https://poza.in",
+      "jobTitle": "Head of GTM at Fibr AI",
+      "description": "AI-powered growth and GTM leader. BITS Pilani CS, DAAD Grant Holder.",
+      "sameAs": [
+        "https://linkedin.com/in/prathamoza",
+        "https://twitter.com/prathamoza"
+      ]
+    }
+    </script>
 </body>
 
 </html>
