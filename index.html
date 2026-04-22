@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratham Oza</title>
+    <!-- Prevent FOUC for Dark Mode -->
+    <script>
+        (function () {
+            try {
+                var localTheme = localStorage.getItem('theme');
+                if (localTheme === 'dark' || (!localTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) { }
+        })();
+    </script>
+    <meta name="description"
+        content="Designing AI-powered experimentation infrastructure for modern companies. Product & Growth leader specializing in AI, performance marketing, and Web3.">
+    <meta name="author" content="Pratham Oza">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pratham Oza — Atomic Growth Systems">
+    <meta property="og:description" content="Designing AI-powered experimentation infrastructure for modern companies.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/images/poza-logo-transparent.svg" type="image/svg">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particleBg"></canvas>
+
+    <!-- ── Navigation ── -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <img src="/assets/images/poza-logo-transparent.svg" alt="Poza" class="nav-logo-img">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/experience" class="nav-link">Experience</a></li>
+                <li><a href="/projects" class="nav-link">Projects</a></li>
+                <li><a href="/startup" class="nav-link">Startup</a></li>
+                <li><a href="/awards" class="nav-link">Awards</a></li>
+                <li><a href="/education" class="nav-link">Education</a></li>
+                <li><a href="/mylife" class="nav-link">My Life</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode"
+                        style="background:none; border:none; cursor:pointer; color:var(--text-primary); transition:transform 0.3s ease; display:flex; align-items:center;">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" style="display:block;">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                </li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ── Hero ── -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <div class="hero-tag">Built by Pratham Oza</div>
+                    <h1 class="hero-title">
+                        Welcome to <br><span class="accent">Poza's Den</span>
+                    </h1>
+                    <p class="hero-description">
+                        Building AI-powered web experiences at Fibr AI (Accel, $7.5M). Figuring out B2B tech sales
+                        with automation and AI — ex Viacom18, UpTrain (YC W23), Searce. BITS Pilani CS + DAAD Grant
+                        Holder.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#contact" class="btn btn-primary">Connect</a>
+                        <a href="/experience" class="btn btn-secondary">View Work</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div id="threeHeroCanvas"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Experience ── -->
+    <section class="section" id="experience">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Professional</div>
+                <h2 class="section-title"><a href="/experience" style="color: inherit; text-decoration: none;">Experience</a></h2>
+                <p class="section-description">
+                    Leading growth and engineering initiatives at the intersection of AI and performance marketing.
+                </p>
+            </div>
+
+            <div class="work-grid">
+                <!-- Card 1 -->
+                <div class="work-card reveal reveal-delay-1">
+                    <div class="work-card-content">
+                        <div class="work-card-icon">🤖</div>
+                        <h3 class="work-card-title">Fibr AI <span style="font-size:0.75em;opacity:0.5">Sep 2024 –
+                                Present</span></h3>
+                        <p class="work-card-description">
+                            Head of GTM at Accel-funded startup (raised $7.5M). Building AI-powered web experiences for
+                            every visitor. Driving B2B tech sales across GTM channels using automation and AI, and
+                            leading client solutioning.
+                        </p>
+                        <div class="work-card-tags">
+                            <span class="tag">AI</span>
+                            <span class="tag">GTM</span>
+                            <span class="tag">B2B SaaS</span>
+                            <span class="tag">CRO</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="work-card reveal reveal-delay-2">
+                    <div class="work-card-content">
+                        <div class="work-card-icon">📺</div>
+                        <h3 class="work-card-title">Viacom18 — JioCinema <span style="font-size:0.75em;opacity:0.5">Feb
+                                – Jun 2024</span></h3>
+                        <p class="work-card-description">
+                            Performance & Growth Marketing at JioCinema. Led the JioCinema Premium
+                            launch (₹29/month) — day-on-day tracker, 100+ ad copies, and product analytics.
+                        </p>
+                        <div class="work-card-tags">
+                            <span class="tag">Growth</span>
+                            <span class="tag">Marketing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-footer reveal" style="margin-top: var(--space-8); text-align: center;">
+                <a href="/experience" class="btn btn-secondary">View Full Experience <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Projects ── -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Innovation</div>
+                <h2 class="section-title"><a href="/projects" style="color: inherit; text-decoration: none;">Projects</a></h2>
+                <p class="section-description">
+                    Exploring the boundaries of technology through specialized projects and research.
+                </p>
+            </div>
+
+            <div class="work-grid">
+                <!-- Card 3 -->
+                <div class="work-card reveal reveal-delay-1">
+                    <div class="work-card-content">
+                        <div class="work-card-icon">⛓️</div>
+                        <h3 class="work-card-title">Raptures — Web3 Wallet</h3>
+                        <p class="work-card-description">
+                            Co-founded a Discord Bot that converts social media accounts into Web3 gateways — 1-click
+                            wallet creation & transactions over channels. Won DAAD Grant (Germany), Desert Hack, Solana
+                            Hacker House (Delhi '22 & Bangalore '23), SPARKLE equity-free grant (~₹2L), pre-seed
+                            incubation at PIEDS, and Udaan Bootcamp by India Accelerator.
+                        </p>
+                        <div class="work-card-tags">
+                            <span class="tag">Web3</span>
+                            <span class="tag">Discord</span>
+                            <span class="tag">Blockchain</span>
+                            <span class="tag">Startup</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="work-card reveal reveal-delay-2">
+                    <div class="work-card-content">
+                        <div class="work-card-icon">🔬</div>
+                        <h3 class="work-card-title">GAN Encryption — NFT Security</h3>
+                        <p class="work-card-description">
+                            Research on advanced encryption using Generative Adversarial Networks to enhance
+                            the security of NFTs. Published research via BITS Pilani.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-footer reveal" style="margin-top: var(--space-8); text-align: center;">
+                <a href="/projects" class="btn btn-secondary">Explore Projects <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Startups ── -->
+    <section class="section" id="startup">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Venture</div>
+                <h2 class="section-title"><a href="/startup" style="color: inherit; text-decoration: none;">Startup</a></h2>
+                <p class="section-description">
+                    Building and advising early-stage companies on growth and infrastructure.
+                </p>
+            </div>
+            <div class="work-grid">
+                <div class="work-card reveal reveal-delay-1">
+                    <div class="work-card-content">
+                        <div class="work-card-icon">⛓️</div>
+                        <h3 class="work-card-title">Raptures <span style="font-size:0.75em;opacity:0.5">Jun 2022 – Jan
+                                2024</span></h3>
+                        <p class="work-card-description">
+                            Co-founded with Madhav. Raptures converts social media accounts into Web3 gateways via a
+                            Discord Bot. Pre-seed incubated at PIEDS, DAAD Grant recipient, Desert Hack winners, pitched
+                            at Solana Hacker House (Delhi & Bangalore), IRL at BuildSpace S4 Dubai, and selected for
+                            Udaan Bootcamp by India Accelerator.
+                        </p>
+                        <div class="work-card-tags">
+                            <span class="tag">Web3</span>
+                            <span class="tag">Discord Bot</span>
+                            <span class="tag">Blockchain</span>
+                            <span class="tag">Pre-Seed</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-card reveal reveal-delay-2">
+                    <div class="work-card-content">
+                        <div class="work-card-icon">🚀</div>
+                        <h3 class="work-card-title">Stealth AI Venture</h3>
+                        <p class="work-card-description">Building autonomous growth infrastructure for modern marketing
+                            teams.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-footer reveal" style="margin-top: var(--space-8); text-align: center;">
+                <a href="/startup" class="btn btn-secondary">Startup Journey <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Awards ── -->
+    <section class="section" id="awards">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Recognition</div>
+                <h2 class="section-title"><a href="/awards" style="color: inherit; text-decoration: none;">Awards</a></h2>
+                <p class="section-description">
+                    Honored by global institutions for innovation and academic excellence.
+                </p>
+            </div>
+            <div class="thinking-list">
+                <div class="thinking-item reveal reveal-delay-1">
+                    <div class="thinking-content">
+                        <h3 class="thinking-title">DAAD Grant — TU Braunschweig, Germany</h3>
+                        <p class="thinking-description">Funding for International High-Tech Start-up Camp hosted by
+                            Technical University Braunschweig. Attended June 2023.</p>
+                    </div>
+                </div>
+                <div class="thinking-item reveal reveal-delay-2">
+                    <div class="thinking-content">
+                        <h3 class="thinking-title">Desert Hack — Overall Winners, All Campus</h3>
+                        <p class="thinking-description">Winners of the BITS Pilani all-campus startup competition with
+                            Raptures.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-footer reveal" style="margin-top: var(--space-8); text-align: center;">
+                <a href="/awards" class="btn btn-secondary">See All Awards <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Education ── -->
+    <section class="section" id="education">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Academic</div>
+                <h2 class="section-title"><a href="/education" style="color: inherit; text-decoration: none;">Education</a></h2>
+                <p class="section-description">
+                    Foundation in Computer Science and Engineering from premier institutions.
+                </p>
+            </div>
+            <div class="thinking-list">
+                <div class="thinking-item reveal reveal-delay-1">
+                    <div class="thinking-content">
+                        <h3 class="thinking-title">BITS Pilani — B.E. Computer Science</h3>
+                        <p class="thinking-description">Bachelor of Engineering in Computer Science, Nov 2020 – Nov
+                            2024. Focus on AI, Systems, and distributed technologies.</p>
+                    </div>
+                </div>
+                <div class="thinking-item reveal reveal-delay-2">
+                    <div class="thinking-content">
+                        <h3 class="thinking-title">BITS Pilani — Minor in Entrepreneurship</h3>
+                        <p class="thinking-description">Minor in Entrepreneurial Studies, Aug 2022 – Jun 2024.
+                            Venture strategy and innovation frameworks.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-footer reveal" style="margin-top: var(--space-8); text-align: center;">
+                <a href="/education" class="btn btn-secondary">Full Background <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── My Life ── -->
+    <section class="section" id="mylife">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Personal</div>
+                <h2 class="section-title"><a href="/mylife" style="color: inherit; text-decoration: none;">My Life</a></h2>
+                <p class="section-description">
+                    Beyond the terminal — interests, hobbies, and the human side.
+                </p>
+            </div>
+            <div class="thinking-list">
+                <div class="thinking-item reveal reveal-delay-1">
+                    <div class="thinking-content">
+                        <h3 class="thinking-title">Toastmasters — President, BITS Pilani</h3>
+                        <p class="thinking-description">President (Jul 2022 – Jan 2023) of the BITS Pilani Toastmasters
+                            Club (29 members, District 98). Achieved President's Distinguished Club status. Also served
+                            as Sergeant-at-Arms and Event Head for Toastmasters at Apogee '22. Completed Pathway:
+                            Motivational Strategies.</p>
+                    </div>
+                </div>
+                <div class="thinking-item reveal reveal-delay-2">
+                    <div class="thinking-content">
+                        <h3 class="thinking-title">Travel & Exploration</h3>
+                        <p class="thinking-description">Passionate about setting footsteps in places rarely explored —
+                            from Europe to the Middle East.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-footer reveal" style="margin-top: var(--space-8); text-align: center;">
+                <a href="/mylife" class="btn btn-secondary">More About Me <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Contact ── -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="reveal">
+                <h2 class="contact-title">Always open to interesting systems, ideas, and conversations.</h2>
+                <p class="contact-description">
+                    Let's talk about growth, AI, and building things that matter.
+                </p>
+                <div class="contact-links">
+                    <a href="https://linkedin.com/in/prathamoza" class="contact-btn" target="_blank" rel="noopener">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        LinkedIn
+                    </a>
+                    <a href="mailto:pozepratham123@gmail.com" class="contact-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                        </svg>
+                        Email
+                    </a>
+                    <a href="https://twitter.com/prathamoza" class="contact-btn" target="_blank" rel="noopener">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                        Twitter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 Pratham Oza. Built with intention.</span>
+                <div class="footer-links">
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/experience" class="footer-link">Experience</a>
+                    <a href="/projects" class="footer-link">Projects</a>
+                    <a href="/startup" class="footer-link">Startup</a>
+                    <a href="/awards" class="footer-link">Awards</a>
+                    <a href="/education" class="footer-link">Education</a>
+                    <a href="/mylife" class="footer-link">My Life</a>
+                    <a href="#contact" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="/js/atoms.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

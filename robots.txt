@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://poza.in/sitemap.xml
