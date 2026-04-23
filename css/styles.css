@@ -153,22 +153,13 @@ body {
 
 /* Contact link — highlighted pill to catch the eye */
 .nav-link-contact {
-    color: #ffffff;
-    background: var(--gradient-accent);
-    border: none;
-    border-radius: var(--radius-full);
-    padding: var(--space-2) var(--space-5);
+    color: var(--accent-purple);
     font-weight: 600;
-    letter-spacing: 0.02em;
-    box-shadow: 0 2px 12px rgba(91, 76, 255, 0.35);
-    transition: transform var(--duration-base) var(--ease-smooth),
-                box-shadow var(--duration-base) var(--ease-smooth);
 }
 
 .nav-link-contact:hover {
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(91, 76, 255, 0.55);
+    color: var(--accent-purple);
+    opacity: 0.75;
 }
 
 /* Animated underline on hover.
@@ -187,12 +178,6 @@ body {
 
 .nav-link:hover::after {
     width: 100%; /* Slides in from left */
-}
-
-/* No underline on the contact pill button */
-.nav-link-contact::after,
-.nav-link-contact:hover::after {
-    display: none;
 }
 
 /* ── Nav actions group (theme toggle + hamburger) ──
