@@ -1,1 +1,1 @@
-Just go to Poza.in
+Just go to www.poza.in
