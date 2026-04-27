@@ -67,9 +67,8 @@ body {
     background: transparent;
     isolation: isolate;  /* Creates a new stacking context so ::before z-index works */
 
-    /* Subtle glass edge borders */
+    /* Subtle glass edge border — gradient bottom line via ::after */
     border-top: 1px solid rgba(255, 255, 255, 0.4);
-    border-bottom: 1px solid var(--border);
 
     /* Smooth transition for box-shadow on scroll */
     transition: box-shadow var(--duration-base) var(--ease-smooth);
@@ -89,6 +88,20 @@ body {
     transition: background var(--duration-base) var(--ease-smooth);
 }
 
+/* Gradient glow line at the bottom — slides in when scrolled */
+.nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--accent-purple) 30%, var(--accent-cyan) 70%, transparent 100%);
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-smooth);
+    z-index: -1;
+}
+
 /* When the user scrolls, JS adds .scrolled — this makes the nav
    more opaque and adds a shadow so it looks elevated */
 .nav.scrolled {
@@ -96,6 +109,9 @@ body {
 }
 .nav.scrolled::before {
     background: var(--nav-scrolled-bg-glass);
+}
+.nav.scrolled::after {
+    opacity: 1;
 }
 
 /* Nav inner is a flex row that spaces logo and links apart */
@@ -141,14 +157,18 @@ body {
     font-weight: 450;
     color: var(--text-secondary);
     letter-spacing: var(--tracking-wide);
-    transition: color var(--duration-base) var(--ease-smooth);
+    transition: color var(--duration-base) var(--ease-smooth),
+                background var(--duration-base) var(--ease-smooth);
     position: relative;
     transform: translateZ(0);
     -webkit-font-smoothing: antialiased;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
 }
 
 .nav-link:hover {
     color: var(--text-primary);
+    background: var(--gradient-subtle);
 }
 
 /* Contact link — highlighted pill to catch the eye */
@@ -845,21 +865,23 @@ body {
         right: 0;
         width: min(280px, 78vw);
         height: 100dvh;
-        padding-top: calc(var(--nav-height) + var(--space-10));
+        padding-top: calc(var(--nav-height) + var(--space-8));
         padding-bottom: var(--space-10);
+        padding-left: var(--space-5);
+        padding-right: var(--space-5);
 
-        /* Solid panel — no blur */
+        /* Solid panel with purple left accent border */
         background: #ffffff;
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
-        border-left: 1px solid rgba(122, 99, 255, 0.2);
-        box-shadow: -8px 0 40px rgba(0, 0, 0, 0.12);
+        border-left: 3px solid var(--accent-purple);
+        box-shadow: -8px 0 48px rgba(0, 0, 0, 0.12), -4px 0 20px rgba(122, 99, 255, 0.12);
 
         /* Stack links vertically */
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         justify-content: center;
-        gap: var(--space-6);
+        gap: var(--space-1);
 
         /* Above everything including WebGL */
         z-index: 9999;
@@ -870,6 +892,23 @@ body {
         transform: translateX(100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                     visibility 0.3s;
+
+        /* Counter reset for numbered nav items */
+        counter-reset: nav-item;
+    }
+
+    /* "Navigation" label pinned at the top of the sidebar */
+    .nav-links::before {
+        content: '— Navigation';
+        position: absolute;
+        top: calc(var(--nav-height) + var(--space-3));
+        left: var(--space-5);
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent-purple);
+        font-weight: 700;
+        opacity: 0.65;
     }
 
     /* VISIBLE: slides in */
@@ -879,22 +918,115 @@ body {
         transform: translateX(0);
     }
 
+    /* Stagger slide-in for each link when sidebar opens */
+    .nav-links.active li {
+        animation: slideInNavLink 0.35s var(--ease-spring) both;
+    }
+    .nav-links.active li:nth-child(1) { animation-delay: 0.04s; }
+    .nav-links.active li:nth-child(2) { animation-delay: 0.09s; }
+    .nav-links.active li:nth-child(3) { animation-delay: 0.14s; }
+    .nav-links.active li:nth-child(4) { animation-delay: 0.19s; }
+    .nav-links.active li:nth-child(5) { animation-delay: 0.24s; }
+    .nav-links.active li:nth-child(6) { animation-delay: 0.29s; }
+    .nav-links.active li:nth-child(7) { animation-delay: 0.34s; }
+
     .nav-link {
-        font-size: var(--text-xl);
+        font-size: var(--text-base);
         font-weight: 500;
-        color: var(--text-primary);
+        color: var(--text-secondary);
         width: 100%;
-        text-align: center;
-        padding: var(--space-2) 0;
+        text-align: left;
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius-md);
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        background: none;
+    }
+
+    .nav-link:hover {
+        background: var(--gradient-subtle);
+        color: var(--text-primary);
+        transform: translateX(3px);
+    }
+
+    /* Numbered counter prefix */
+    .nav-link::before {
+        counter-increment: nav-item;
+        content: counter(nav-item, decimal-leading-zero);
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        opacity: 0.55;
+        min-width: 20px;
+        letter-spacing: 0.04em;
+        flex-shrink: 0;
+        position: static;
+    }
+
+    /* Override desktop underline ::after → arrow indicator */
+    .nav-link::after {
+        content: '›';
+        position: static;
+        bottom: auto;
+        left: auto;
+        width: auto;
+        height: auto;
+        background: none;
+        margin-left: auto;
+        opacity: 0;
+        transform: translateX(-4px);
+        transition: opacity 0.2s, transform 0.2s;
+        font-size: var(--text-xl);
+        color: var(--accent-purple);
+        flex-shrink: 0;
+    }
+
+    .nav-link:hover::after {
+        width: auto;
+        opacity: 1;
+        transform: translateX(0);
     }
 
     .nav-link-contact {
         color: var(--accent-purple);
+        font-weight: 600;
     }
 
-    /* Show hamburger on mobile */
+    /* Show hamburger on mobile — styled as a pill with MENU label */
     .nav-toggle {
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px 6px;
+        background: var(--gradient-subtle);
+        border: 1.5px solid rgba(122, 99, 255, 0.3);
+        border-radius: var(--radius-full);
+        animation: navMenuPulse 1.8s ease-out 1.2s both;
+    }
+
+    .nav-toggle span {
+        width: 18px;
+    }
+
+    .nav-toggle::after {
+        content: 'MENU';
+        font-size: 8px;
+        letter-spacing: 0.12em;
+        font-weight: 700;
+        color: var(--accent-purple);
+        margin-top: 1px;
+        display: block;
+    }
+
+    .nav-toggle.active {
+        border-color: rgba(122, 99, 255, 0.55);
+    }
+
+    .nav-toggle.active::after {
+        content: 'CLOSE';
     }
 
     /* Animate hamburger → X when open */
@@ -1021,8 +1153,8 @@ body {
 @media (max-width: 768px) {
     [data-theme="dark"] .nav-links {
         background: #0a0a0f;
-        border-left: 1px solid rgba(122, 99, 255, 0.3);
-        box-shadow: -8px 0 40px rgba(0, 0, 0, 0.5);
+        border-left: 3px solid var(--accent-purple);
+        box-shadow: -8px 0 48px rgba(0, 0, 0, 0.5), -4px 0 20px rgba(122, 99, 255, 0.18);
     }
 }
 
@@ -1096,6 +1228,30 @@ body {
 
     .section-label {
         font-size: 0.65rem;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   NAV KEYFRAME ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* One-time attention pulse on the mobile MENU button */
+@keyframes navMenuPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(122, 99, 255, 0); }
+    40%  { box-shadow: 0 0 0 6px rgba(122, 99, 255, 0.2), 0 0 20px rgba(122, 99, 255, 0.15); }
+    100% { box-shadow: 0 0 0 0 rgba(122, 99, 255, 0); }
+}
+
+/* Sidebar link stagger slide-in from the right */
+@keyframes slideInNavLink {
+    from {
+        opacity: 0;
+        transform: translateX(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
