@@ -368,15 +368,15 @@
                     float cosT = clamp(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
                     float limb = pow(cosT, 0.5);
 
-                    // Hot-white centre → bright yellow → deep orange → dark red limb
-                    vec3 hotWhite = vec3(1.00, 0.97, 0.82);
-                    vec3 yellow   = vec3(1.00, 0.72, 0.12);
-                    vec3 orange   = vec3(0.98, 0.38, 0.04);
-                    vec3 darkRed  = vec3(0.60, 0.08, 0.01);
+                    // Bright cyan core → purple mid → deep indigo at limb
+                    vec3 coreWhite = vec3(0.85, 0.96, 1.00); // near-white with cyan tint
+                    vec3 cyan      = vec3(0.455, 0.878, 0.937); // #74e0ef
+                    vec3 purple    = vec3(0.478, 0.388, 1.00);  // #7a63ff
+                    vec3 darkIndigo= vec3(0.20,  0.15,  0.55);  // deep edge
 
-                    vec3 surface = mix(orange, yellow,   n);
-                    surface      = mix(surface, hotWhite, n * n * 0.6);
-                    surface      = mix(darkRed, surface,  limb * limb);
+                    vec3 surface = mix(purple, cyan,      n);
+                    surface      = mix(surface, coreWhite, n * n * 0.55);
+                    surface      = mix(darkIndigo, surface, limb * limb);
 
                     gl_FragColor = vec4(surface, 1.0);
                 }
@@ -384,7 +384,7 @@
         });
         const sunCore = new THREE.Mesh(sunCoreGeo, sunCoreMat);
 
-        // ── Chromosphere rim (orange-yellow BackSide glow) ──
+        // ── Chromosphere rim (cyan BackSide glow) ──
         const sunInnerGlowGeo = new THREE.SphereGeometry(1.22, 32, 32);
         const sunInnerGlowMat = new THREE.ShaderMaterial({
             vertexShader: `
@@ -398,7 +398,7 @@
                 varying vec3 vNormal;
                 void main() {
                     float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
-                    gl_FragColor = vec4(1.0, 0.55, 0.08, intensity * 0.9);
+                    gl_FragColor = vec4(0.455, 0.878, 0.937, intensity * 0.9); // #74e0ef cyan
                 }
             `,
             transparent: true,
@@ -408,7 +408,7 @@
         });
         const sunInnerGlow = new THREE.Mesh(sunInnerGlowGeo, sunInnerGlowMat);
 
-        // ── Corona — large warm golden halo ──
+        // ── Corona — large purple halo ──
         const sunOuterGlowGeo = new THREE.SphereGeometry(1.9, 32, 32);
         const sunOuterGlowMat = new THREE.ShaderMaterial({
             vertexShader: `
@@ -422,7 +422,7 @@
                 varying vec3 vNormal;
                 void main() {
                     float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.5);
-                    gl_FragColor = vec4(1.0, 0.75, 0.2, intensity * 0.45);
+                    gl_FragColor = vec4(0.478, 0.388, 1.0, intensity * 0.45); // #7a63ff purple
                 }
             `,
             transparent: true,
