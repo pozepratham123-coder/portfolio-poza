@@ -594,6 +594,18 @@
         function drawBg() {
             bgCtx.clearRect(0, 0, bgW, bgH); // Wipe the canvas clean each frame
 
+            // Clip out the 3D canvas region so 2D particles don't bleed through
+            // the transparent WebGL scene background (alpha: true on the renderer).
+            // evenodd fill rule: the outer rect = draw; inner rect = punch hole.
+            bgCtx.save();
+            if (threeContainer) {
+                const r = threeContainer.getBoundingClientRect();
+                bgCtx.beginPath();
+                bgCtx.rect(0, 0, bgW, bgH);                    // Full canvas — draw here
+                bgCtx.rect(r.left, r.top, r.width, r.height);  // 3D area — exclude this
+                bgCtx.clip('evenodd');
+            }
+
             // Update physics and draw each particle
             atoms.forEach(atom => {
                 atom.update();
@@ -650,6 +662,7 @@
                 });
             }
 
+            bgCtx.restore(); // Remove the clipping path for the next frame
             requestAnimationFrame(drawBg); // Schedule next frame
         }
 
