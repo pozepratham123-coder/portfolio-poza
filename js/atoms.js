@@ -484,7 +484,7 @@
         const sunGroup = new THREE.Group();
         sunGroup.add(sunCore);
         sunGroup.add(sunInnerGlow);
-        sunGroup.add(sunOuterGlow);
+        // sunGroup.add(sunOuterGlow); // outer purple halo removed
         // sunGroup.add(sunRing); // rings removed
         sunGroup.rotation.x =  Math.PI * 0.12;
         sunGroup.rotation.z =  Math.PI * 0.06;
