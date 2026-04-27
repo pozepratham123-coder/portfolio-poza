@@ -485,7 +485,7 @@
         sunGroup.add(sunCore);
         sunGroup.add(sunInnerGlow);
         sunGroup.add(sunOuterGlow);
-        sunGroup.add(sunRing);
+        // sunGroup.add(sunRing); // rings removed
         sunGroup.rotation.x =  Math.PI * 0.12;
         sunGroup.rotation.z =  Math.PI * 0.06;
         sunGroup.visible = !darkMode; // Only shown in light mode
