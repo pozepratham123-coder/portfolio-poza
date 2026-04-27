@@ -323,33 +323,69 @@
         // Colours: #f2f2f2 / #a0a0b0 / #666677 / #444455
         // ═══════════════════════════════════════════════
 
-        // ── Sun core — dark centre fading to lighter rim (visible on white bg) ──
-        // On a white page #f2f2f2 is invisible, so we use the darker shades
-        // for the solid parts and let the lighter shades form the outer glow.
+        // ── Sun core — animated solar surface with granulation & limb darkening ──
+        const sunCoreUniforms = { u_time: { value: 0 } };
         const sunCoreGeo = new THREE.SphereGeometry(1.1, 64, 64);
         const sunCoreMat = new THREE.ShaderMaterial({
+            uniforms: sunCoreUniforms,
             vertexShader: `
                 varying vec3 vNormal;
+                varying vec2 vUv;
                 void main() {
                     vNormal = normalize(normalMatrix * normal);
+                    vUv     = uv;
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                 }
             `,
             fragmentShader: `
-                varying vec3 vNormal;
+                uniform float u_time;
+                varying vec3  vNormal;
+                varying vec2  vUv;
+
+                float hash(vec2 p) {
+                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+                }
+                float noise(vec2 p) {
+                    vec2 i = floor(p); vec2 f = fract(p);
+                    f = f * f * (3.0 - 2.0 * f);
+                    return mix(
+                        mix(hash(i), hash(i + vec2(1,0)), f.x),
+                        mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), f.x), f.y
+                    );
+                }
+                float fbm(vec2 p) {
+                    float v = 0.0; float a = 0.5;
+                    for (int i = 0; i < 4; i++) { v += a * noise(p); p *= 2.1; a *= 0.5; }
+                    return v;
+                }
+
                 void main() {
-                    float cosTheta = clamp(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
-                    float limb  = pow(cosTheta, 0.5);
-                    vec3 center = vec3(0.267, 0.267, 0.333); // #444455 — dark, visible on white
-                    vec3 edge   = vec3(0.400, 0.400, 0.467); // #666677 — slightly lighter rim
-                    gl_FragColor = vec4(mix(edge, center, limb), 1.0);
+                    float t  = u_time * 0.04;
+                    vec2  uv = vUv * 6.0;
+                    float n  = fbm(uv + fbm(uv + vec2(t, t * 0.7)));
+
+                    // Limb darkening — edges are cooler/darker like a real star
+                    float cosT = clamp(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
+                    float limb = pow(cosT, 0.5);
+
+                    // Hot-white centre → bright yellow → deep orange → dark red limb
+                    vec3 hotWhite = vec3(1.00, 0.97, 0.82);
+                    vec3 yellow   = vec3(1.00, 0.72, 0.12);
+                    vec3 orange   = vec3(0.98, 0.38, 0.04);
+                    vec3 darkRed  = vec3(0.60, 0.08, 0.01);
+
+                    vec3 surface = mix(orange, yellow,   n);
+                    surface      = mix(surface, hotWhite, n * n * 0.6);
+                    surface      = mix(darkRed, surface,  limb * limb);
+
+                    gl_FragColor = vec4(surface, 1.0);
                 }
             `
         });
         const sunCore = new THREE.Mesh(sunCoreGeo, sunCoreMat);
 
-        // ── Inner corona rim (#666677 rim glow, BackSide) ──
-        const sunInnerGlowGeo = new THREE.SphereGeometry(1.28, 32, 32);
+        // ── Chromosphere rim (orange-yellow BackSide glow) ──
+        const sunInnerGlowGeo = new THREE.SphereGeometry(1.22, 32, 32);
         const sunInnerGlowMat = new THREE.ShaderMaterial({
             vertexShader: `
                 varying vec3 vNormal;
@@ -361,8 +397,8 @@
             fragmentShader: `
                 varying vec3 vNormal;
                 void main() {
-                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.2);
-                    gl_FragColor = vec4(0.400, 0.400, 0.467, intensity * 1.6); // #666677
+                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
+                    gl_FragColor = vec4(1.0, 0.55, 0.08, intensity * 0.9);
                 }
             `,
             transparent: true,
@@ -372,8 +408,8 @@
         });
         const sunInnerGlow = new THREE.Mesh(sunInnerGlowGeo, sunInnerGlowMat);
 
-        // ── Outer corona halo (#a0a0b0, soft diffuse ring) ──
-        const sunOuterGlowGeo = new THREE.SphereGeometry(1.75, 32, 32);
+        // ── Corona — large warm golden halo ──
+        const sunOuterGlowGeo = new THREE.SphereGeometry(1.9, 32, 32);
         const sunOuterGlowMat = new THREE.ShaderMaterial({
             vertexShader: `
                 varying vec3 vNormal;
@@ -385,8 +421,8 @@
             fragmentShader: `
                 varying vec3 vNormal;
                 void main() {
-                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
-                    gl_FragColor = vec4(0.627, 0.627, 0.690, intensity * 0.55); // #a0a0b0
+                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.5);
+                    gl_FragColor = vec4(1.0, 0.75, 0.2, intensity * 0.45);
                 }
             `,
             transparent: true,
@@ -396,8 +432,8 @@
         });
         const sunOuterGlow = new THREE.Mesh(sunOuterGlowGeo, sunOuterGlowMat);
 
-        // ── Corona rings — dark inside fading to light outside ──
-        const sunRingGeo = new THREE.RingGeometry(1.35, 2.8, 64, 8);
+        // ── Solar corona rings — orange inner to pale-yellow outer ──
+        const sunRingGeo = new THREE.RingGeometry(1.3, 2.6, 64, 8);
         const sunRingUniforms = { u_time: { value: 0 } };
         const sunRingMat = new THREE.ShaderMaterial({
             uniforms: sunRingUniforms,
@@ -410,33 +446,31 @@
             `,
             fragmentShader: `
                 uniform float u_time;
-                varying vec3 vLocalPos;
+                varying vec3  vLocalPos;
                 void main() {
                     float dist   = length(vLocalPos.xy);
-                    float radius = clamp((dist - 1.35) / 1.45, 0.0, 1.0);
+                    float radius = clamp((dist - 1.3) / 1.3, 0.0, 1.0);
 
                     float rings = 0.0;
-                    float band1 = smoothstep(0.00, 0.05, radius) * smoothstep(0.22, 0.13, radius); rings += band1 * 0.90;
-                    float band2 = smoothstep(0.26, 0.30, radius) * smoothstep(0.56, 0.46, radius); rings += band2 * 0.75;
-                    float band3 = smoothstep(0.60, 0.64, radius) * smoothstep(0.80, 0.73, radius); rings += band3 * 0.55;
-                    float band4 = smoothstep(0.84, 0.87, radius) * smoothstep(0.98, 0.93, radius); rings += band4 * 0.30;
+                    float band1 = smoothstep(0.00, 0.05, radius) * smoothstep(0.20, 0.12, radius); rings += band1 * 1.0;
+                    float band2 = smoothstep(0.24, 0.28, radius) * smoothstep(0.54, 0.44, radius); rings += band2 * 0.8;
+                    float band3 = smoothstep(0.58, 0.62, radius) * smoothstep(0.78, 0.70, radius); rings += band3 * 0.55;
+                    float band4 = smoothstep(0.82, 0.85, radius) * smoothstep(0.98, 0.92, radius); rings += band4 * 0.30;
 
-                    float detail = smoothstep(0.3, 0.6, fract(radius * 34.0 + u_time * 0.04)) * 0.12 + 0.88;
+                    float detail = smoothstep(0.3, 0.6, fract(radius * 32.0 + u_time * 0.05)) * 0.15 + 0.85;
                     rings *= detail;
 
-                    // Dark inside → light outside so rings are visible on white background
-                    vec3 c1 = vec3(0.267, 0.267, 0.333); // #444455 innermost
-                    vec3 c2 = vec3(0.400, 0.400, 0.467); // #666677
-                    vec3 c3 = vec3(0.627, 0.627, 0.690); // #a0a0b0
-                    vec3 c4 = vec3(0.949, 0.949, 0.949); // #f2f2f2 outermost (fades to bg)
+                    vec3 c1 = vec3(1.00, 0.50, 0.05); // deep orange
+                    vec3 c2 = vec3(1.00, 0.75, 0.15); // golden
+                    vec3 c3 = vec3(1.00, 0.90, 0.50); // pale yellow
+                    vec3 c4 = vec3(1.00, 0.96, 0.82); // near-white (fades into bg)
 
-                    vec3 color = mix(c1, c2, smoothstep(0.00, 0.30, radius));
-                    color      = mix(color, c3, smoothstep(0.30, 0.65, radius));
-                    color      = mix(color, c4, smoothstep(0.65, 1.00, radius));
+                    vec3 color = mix(c1, c2, smoothstep(0.00, 0.35, radius));
+                    color      = mix(color, c3, smoothstep(0.35, 0.70, radius));
+                    color      = mix(color, c4, smoothstep(0.70, 1.00, radius));
 
-                    // Outer edge fades out so rings blend into the white background
-                    float edgeFade = 1.0 - smoothstep(0.75, 1.0, radius);
-                    gl_FragColor = vec4(color, rings * 0.8 * edgeFade);
+                    float edgeFade = 1.0 - smoothstep(0.78, 1.0, radius);
+                    gl_FragColor = vec4(color, rings * 0.7 * edgeFade);
                 }
             `,
             transparent: true,
@@ -497,8 +531,9 @@
                 diskUniforms.u_darkMode.value = 1.0;
             } else {
                 // ── Sun animation ──
-                sunGroup.position.y      = Math.sin(time * 0.8) * 0.1;
-                sunGroup.rotation.y      = time * 0.015;
+                sunGroup.position.y          = Math.sin(time * 0.8) * 0.1;
+                sunGroup.rotation.y          = time * 0.015;
+                sunCoreUniforms.u_time.value = time;
                 sunRingUniforms.u_time.value = time;
             }
 
