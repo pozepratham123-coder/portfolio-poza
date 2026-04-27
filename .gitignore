@@ -1,3 +1,6 @@
+# Auto-push watcher (local only, no need to commit this)
+auto-push.sh
+
 # Local Server / IDE
 .DS_Store
 .claude/
