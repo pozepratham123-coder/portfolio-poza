@@ -65,6 +65,17 @@
         .work-card { height: 100%; box-sizing: border-box; }
         .work-card-content { height: 100%; display: flex; flex-direction: column; }
         .work-card-description { flex: 1; }
+        /* Company logos */
+        .company-logo {
+            height: 32px;
+            width: auto;
+            max-width: 130px;
+            object-fit: contain;
+            display: block;
+        }
+        [data-theme="dark"] .logo-invert {
+            filter: invert(1) brightness(1.8);
+        }
     </style>
 </head>
 
