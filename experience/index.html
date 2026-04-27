@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience — Pratham Oza</title>
-    <meta name="description" content="Pratham Oza's professional experience in AI, growth marketing, and product — Fibr AI, Viacom18, UpTrain (YC W23), Searce.">
+    <meta name="description"
+        content="Pratham Oza's professional experience in AI, growth marketing, and product — Fibr AI, Viacom18, UpTrain (YC W23), Searce.">
     <meta name="author" content="Pratham Oza">
     <meta property="og:title" content="Experience — Pratham Oza">
     <meta property="og:description" content="Head of GTM at Fibr AI. Growth, AI, and performance marketing.">
@@ -20,13 +21,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Prevent FOUC for Dark Mode -->
     <script>
-        (function() {
+        (function () {
             try {
                 var localTheme = localStorage.getItem('theme');
                 if (localTheme === 'dark' || (!localTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.setAttribute('data-theme', 'dark');
                 }
-            } catch (e) {}
+            } catch (e) { }
         })();
     </script>
     <link rel="stylesheet" href="/css/reset.css">
@@ -43,16 +44,19 @@
             letter-spacing: 0.03em;
             white-space: nowrap;
         }
+
         .work-badge-fulltime {
             background: rgba(122, 99, 255, 0.12);
             color: var(--accent-purple);
             border: 1px solid rgba(122, 99, 255, 0.25);
         }
+
         .work-badge-internship {
             background: rgba(116, 224, 239, 0.12);
             color: var(--accent-cyan);
             border: 1px solid rgba(116, 224, 239, 0.25);
         }
+
         .work-card-header {
             display: flex;
             align-items: flex-start;
@@ -60,11 +64,26 @@
             gap: var(--space-2);
             margin-bottom: var(--space-3);
         }
+
         /* Uniform card height */
-        .work-grid { align-items: stretch; }
-        .work-card { height: 100%; box-sizing: border-box; }
-        .work-card-content { height: 100%; display: flex; flex-direction: column; }
-        .work-card-description { flex: 1; }
+        .work-grid {
+            align-items: stretch;
+        }
+
+        .work-card {
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .work-card-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-card-description {
+            flex: 1;
+        }
     </style>
 </head>
 
@@ -74,7 +93,8 @@
     <!-- Navigation -->
     <nav class="nav" id="nav">
         <div class="nav-inner">
-            <a href="/" class="nav-logo"><img src="/assets/images/poza-logo-transparent.svg" alt="Poza" class="nav-logo-img"></a>
+            <a href="/" class="nav-logo"><img src="/assets/images/poza-logo-transparent.svg" alt="Poza"
+                    class="nav-logo-img"></a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/experience" class="nav-link">Experience</a></li>
                 <li><a href="/projects" class="nav-link">Projects</a></li>
@@ -86,8 +106,24 @@
             </ul>
             <div class="nav-actions">
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
-                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" style="display:none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" style="display:block;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
                 </button>
                 <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                     <span></span><span></span><span></span>
@@ -102,94 +138,116 @@
             <div class="section-header reveal">
                 <div class="section-label">Professional</div>
                 <h1 class="section-title">Experience</h1>
-                <p class="section-description">Leading growth and engineering initiatives at the intersection of AI and performance marketing.</p>
+                <p class="section-description">Leading growth and engineering initiatives at the intersection of AI</p>
             </div>
 
             <div class="work-grid">
 
                 <!-- Fibr AI — Sep 2024–Present -->
                 <a href="/experience/fibrai" style="text-decoration: none; display: block;">
-                <div class="work-card reveal reveal-delay-1">
-                    <div class="work-card-content">
-                        <div class="work-card-header">
-                            <div class="work-card-icon">🤖</div>
-                            <span class="work-badge work-badge-fulltime">Full-Time</span>
-                        </div>
-                        <h2 class="work-card-title">Fibr AI <span style="font-size:0.75em;opacity:0.5">Sep 2024 – Present</span></h2>
-                        <p class="work-card-description">Head of GTM at Accel-funded startup (Accel Funded, $7.5M). Building AI-powered web experiences for every visitor. Driving B2B tech sales across GTM channels, and leading client solutioning.</p>
-                        <div class="work-card-tags">
-                            <span class="tag">Product</span><span class="tag">GTM</span><span class="tag">Outbound Sales</span><span class="tag">Conversion Rate Optimization</span>
+                    <div class="work-card reveal reveal-delay-1">
+                        <div class="work-card-content">
+                            <div class="work-card-header">
+                                <div class="work-card-icon">🤖</div>
+                                <span class="work-badge work-badge-fulltime">Full-Time</span>
+                            </div>
+                            <h2 class="work-card-title">Fibr AI <span style="font-size:0.75em;opacity:0.5">Sep 2024 –
+                                    Present</span></h2>
+                            <p class="work-card-description">Head of GTM at Accel-funded startup (Accel Funded, $7.5M).
+                                Building AI-powered web experiences for every visitor. Driving B2B tech sales across GTM
+                                channels, and leading client solutioning.</p>
+                            <div class="work-card-tags">
+                                <span class="tag">Product</span><span class="tag">GTM</span><span class="tag">Outbound
+                                    Sales</span><span class="tag">Conversion Rate Optimization</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </a>
 
                 <!-- Searce Inc — Jul–Sep 2024 -->
                 <a href="/experience/searce" style="text-decoration: none; display: block;">
-                <div class="work-card reveal reveal-delay-2">
-                    <div class="work-card-content">
-                        <div class="work-card-header">
-                            <div class="work-card-icon">☁️</div>
-                            <span class="work-badge work-badge-fulltime">Full-Time</span>
-                        </div>
-                        <h2 class="work-card-title">Searce Inc <span style="font-size:0.75em;opacity:0.5">Jul – Sep 2024</span></h2>
-                        <p class="work-card-description">Cloud Consultant on the Google Workspace Team, India Division. Completed Google Cloud Digital Leader Certification at a Global Google Premier Partner.</p>
-                        <div class="work-card-tags">
-                            <span class="tag">Google Cloud</span><span class="tag">Cloud</span><span class="tag">Consulting</span>
+                    <div class="work-card reveal reveal-delay-2">
+                        <div class="work-card-content">
+                            <div class="work-card-header">
+                                <div class="work-card-icon">☁️</div>
+                                <span class="work-badge work-badge-fulltime">Full-Time</span>
+                            </div>
+                            <h2 class="work-card-title">Searce Inc <span style="font-size:0.75em;opacity:0.5">Jul – Sep
+                                    2024</span></h2>
+                            <p class="work-card-description">Cloud Consultant on the Google Workspace Team, India
+                                Division. Completed Google Cloud Digital Leader Certification at a Global Google Premier
+                                Partner.</p>
+                            <div class="work-card-tags">
+                                <span class="tag">Google Cloud</span><span class="tag">Cloud</span><span
+                                    class="tag">Consulting</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </a>
 
                 <!-- Viacom18 — Feb–Jun 2024 -->
                 <a href="/experience/viacom18" style="text-decoration: none; display: block;">
-                <div class="work-card reveal reveal-delay-1">
-                    <div class="work-card-content">
-                        <div class="work-card-header">
-                            <div class="work-card-icon">📺</div>
-                            <span class="work-badge work-badge-internship">Internship · PPO Offered</span>
-                        </div>
-                        <h2 class="work-card-title">Viacom18, JioCinema <span style="font-size:0.75em;opacity:0.5">Feb – Jun 2024</span></h2>
-                        <p class="work-card-description">Performance & Growth Marketing at JioCinema. Day in, day out working with Google & Meta Ads Managers. Worked on the JioCinema Premium launch (₹29/month), Lowest OTT plan in the entire world.</p>
-                        <div class="work-card-tags">
-                            <span class="tag">Growth</span><span class="tag">Marketing</span>
+                    <div class="work-card reveal reveal-delay-1">
+                        <div class="work-card-content">
+                            <div class="work-card-header">
+                                <div class="work-card-icon">📺</div>
+                                <span class="work-badge work-badge-internship">Internship · PPO Offered</span>
+                            </div>
+                            <h2 class="work-card-title">Viacom18, JioCinema <span
+                                    style="font-size:0.75em;opacity:0.5">Feb – Jun 2024</span></h2>
+                            <p class="work-card-description">Performance & Growth Marketing at JioCinema. Day in, day
+                                out working with Google & Meta Ads Managers. Worked on the JioCinema Premium launch
+                                (₹29/month), Lowest OTT plan in the entire world.</p>
+                            <div class="work-card-tags">
+                                <span class="tag">Performance Marketing</span>
+                                <span class="tag">Advertising</span>
+                                <span class="tag">Product Analytics</span>
+                                <span class="tag">Excel</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </a>
 
                 <!-- UpTrain — Sep–Dec 2023 -->
                 <a href="/experience/uptrain" style="text-decoration: none; display: block;">
-                <div class="work-card reveal reveal-delay-2">
-                    <div class="work-card-content">
-                        <div class="work-card-header">
-                            <div class="work-card-icon">🚀</div>
-                            <span class="work-badge work-badge-internship">Internship</span>
-                        </div>
-                        <h2 class="work-card-title">UpTrain (YC W23) <span style="font-size:0.75em;opacity:0.5">Sep – Dec 2023</span></h2>
-                        <p class="work-card-description">Founding Team, Founder's Office. Researched 50+ AI companies in North America, 100+ targeted outreaches, and published 4 blogs on LLM evaluation metrics.</p>
-                        <div class="work-card-tags">
-                            <span class="tag">YC</span><span class="tag">AI</span><span class="tag">Sales</span><span class="tag">Growth</span>
+                    <div class="work-card reveal reveal-delay-2">
+                        <div class="work-card-content">
+                            <div class="work-card-header">
+                                <div class="work-card-icon">🚀</div>
+                                <span class="work-badge work-badge-internship">Internship</span>
+                            </div>
+                            <h2 class="work-card-title">UpTrain (YC W23) <span style="font-size:0.75em;opacity:0.5">Sep
+                                    – Dec 2023</span></h2>
+                            <p class="work-card-description">Founding Team, Founder's Office. Researched 50+ AI
+                                companies in North America, 100+ targeted outreaches, and published 4 blogs on LLM
+                                evaluation metrics.</p>
+                            <div class="work-card-tags">
+                                <span class="tag">YC</span><span class="tag">AI</span><span
+                                    class="tag">Sales</span><span class="tag">Growth</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </a>
 
                 <!-- Silver Touch — Jun–Aug 2022 -->
                 <a href="/experience/silvertouch" style="text-decoration: none; display: block;">
-                <div class="work-card reveal reveal-delay-1">
-                    <div class="work-card-content">
-                        <div class="work-card-header">
-                            <div class="work-card-icon">🤖</div>
-                            <span class="work-badge work-badge-internship">Internship</span>
-                        </div>
-                        <h2 class="work-card-title">Silver Touch Technologies <span style="font-size:0.75em;opacity:0.5">Jun – Aug 2022</span></h2>
-                        <p class="work-card-description">RPA Developer via BITS Pilani PS-1. Top Performing Intern (Grade A). Built Grade Confirmation Bot and E-commerce OCR Bot with 20× efficiency over manual processes.</p>
-                        <div class="work-card-tags">
-                            <span class="tag">RPA</span><span class="tag">Automation</span><span class="tag">OCR</span>
+                    <div class="work-card reveal reveal-delay-1">
+                        <div class="work-card-content">
+                            <div class="work-card-header">
+                                <div class="work-card-icon">🤖</div>
+                                <span class="work-badge work-badge-internship">Internship</span>
+                            </div>
+                            <h2 class="work-card-title">Silver Touch Technologies <span
+                                    style="font-size:0.75em;opacity:0.5">Jun – Aug 2022</span></h2>
+                            <p class="work-card-description">RPA Developer via BITS Pilani PS-1. Top Performing Intern
+                                (Grade A). Built Grade Confirmation Bot and E-commerce OCR Bot with 20× efficiency over
+                                manual processes.</p>
+                            <div class="work-card-tags">
+                                <span class="tag">RPA</span><span class="tag">Automation</span><span
+                                    class="tag">OCR</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </a>
 
             </div>
@@ -213,7 +271,7 @@
         </div>
     </footer>
 
-    <script defer src="/js/atoms.js"></script>
     <script defer src="/js/main.js"></script>
 </body>
+
 </html>
