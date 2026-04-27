@@ -323,7 +323,9 @@
         // Colours: #f2f2f2 / #a0a0b0 / #666677 / #444455
         // ═══════════════════════════════════════════════
 
-        // ── Sun core — solid sphere with limb darkening ──
+        // ── Sun core — dark centre fading to lighter rim (visible on white bg) ──
+        // On a white page #f2f2f2 is invisible, so we use the darker shades
+        // for the solid parts and let the lighter shades form the outer glow.
         const sunCoreGeo = new THREE.SphereGeometry(1.1, 64, 64);
         const sunCoreMat = new THREE.ShaderMaterial({
             vertexShader: `
@@ -337,16 +339,16 @@
                 varying vec3 vNormal;
                 void main() {
                     float cosTheta = clamp(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
-                    float limb  = pow(cosTheta, 0.4);
-                    vec3 bright = vec3(0.949, 0.949, 0.949); // #f2f2f2
-                    vec3 dim    = vec3(0.627, 0.627, 0.690); // #a0a0b0
-                    gl_FragColor = vec4(mix(dim, bright, limb), 1.0);
+                    float limb  = pow(cosTheta, 0.5);
+                    vec3 center = vec3(0.267, 0.267, 0.333); // #444455 — dark, visible on white
+                    vec3 edge   = vec3(0.400, 0.400, 0.467); // #666677 — slightly lighter rim
+                    gl_FragColor = vec4(mix(edge, center, limb), 1.0);
                 }
             `
         });
         const sunCore = new THREE.Mesh(sunCoreGeo, sunCoreMat);
 
-        // ── Inner corona rim (BackSide glow, like photon ring) ──
+        // ── Inner corona rim (#666677 rim glow, BackSide) ──
         const sunInnerGlowGeo = new THREE.SphereGeometry(1.28, 32, 32);
         const sunInnerGlowMat = new THREE.ShaderMaterial({
             vertexShader: `
@@ -359,19 +361,19 @@
             fragmentShader: `
                 varying vec3 vNormal;
                 void main() {
-                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.5);
-                    gl_FragColor = vec4(0.627, 0.627, 0.690, intensity * 1.8); // #a0a0b0
+                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.2);
+                    gl_FragColor = vec4(0.400, 0.400, 0.467, intensity * 1.6); // #666677
                 }
             `,
             transparent: true,
-            blending: THREE.AdditiveBlending,
+            blending: THREE.NormalBlending,
             side: THREE.BackSide,
             depthWrite: false
         });
         const sunInnerGlow = new THREE.Mesh(sunInnerGlowGeo, sunInnerGlowMat);
 
-        // ── Outer corona halo (soft, large) ──
-        const sunOuterGlowGeo = new THREE.SphereGeometry(1.7, 32, 32);
+        // ── Outer corona halo (#a0a0b0, soft diffuse ring) ──
+        const sunOuterGlowGeo = new THREE.SphereGeometry(1.75, 32, 32);
         const sunOuterGlowMat = new THREE.ShaderMaterial({
             vertexShader: `
                 varying vec3 vNormal;
@@ -383,8 +385,8 @@
             fragmentShader: `
                 varying vec3 vNormal;
                 void main() {
-                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.5);
-                    gl_FragColor = vec4(0.400, 0.400, 0.467, intensity * 0.7); // #666677
+                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
+                    gl_FragColor = vec4(0.627, 0.627, 0.690, intensity * 0.55); // #a0a0b0
                 }
             `,
             transparent: true,
@@ -394,7 +396,7 @@
         });
         const sunOuterGlow = new THREE.Mesh(sunOuterGlowGeo, sunOuterGlowMat);
 
-        // ── Corona rings (animated, like accretion disk but for the sun) ──
+        // ── Corona rings — dark inside fading to light outside ──
         const sunRingGeo = new THREE.RingGeometry(1.35, 2.8, 64, 8);
         const sunRingUniforms = { u_time: { value: 0 } };
         const sunRingMat = new THREE.ShaderMaterial({
@@ -417,21 +419,24 @@
                     float band1 = smoothstep(0.00, 0.05, radius) * smoothstep(0.22, 0.13, radius); rings += band1 * 0.90;
                     float band2 = smoothstep(0.26, 0.30, radius) * smoothstep(0.56, 0.46, radius); rings += band2 * 0.75;
                     float band3 = smoothstep(0.60, 0.64, radius) * smoothstep(0.80, 0.73, radius); rings += band3 * 0.55;
-                    float band4 = smoothstep(0.84, 0.87, radius) * smoothstep(0.98, 0.93, radius); rings += band4 * 0.35;
+                    float band4 = smoothstep(0.84, 0.87, radius) * smoothstep(0.98, 0.93, radius); rings += band4 * 0.30;
 
                     float detail = smoothstep(0.3, 0.6, fract(radius * 34.0 + u_time * 0.04)) * 0.12 + 0.88;
                     rings *= detail;
 
-                    vec3 c1 = vec3(0.949, 0.949, 0.949); // #f2f2f2
-                    vec3 c2 = vec3(0.627, 0.627, 0.690); // #a0a0b0
-                    vec3 c3 = vec3(0.400, 0.400, 0.467); // #666677
-                    vec3 c4 = vec3(0.267, 0.267, 0.333); // #444455
+                    // Dark inside → light outside so rings are visible on white background
+                    vec3 c1 = vec3(0.267, 0.267, 0.333); // #444455 innermost
+                    vec3 c2 = vec3(0.400, 0.400, 0.467); // #666677
+                    vec3 c3 = vec3(0.627, 0.627, 0.690); // #a0a0b0
+                    vec3 c4 = vec3(0.949, 0.949, 0.949); // #f2f2f2 outermost (fades to bg)
 
                     vec3 color = mix(c1, c2, smoothstep(0.00, 0.30, radius));
                     color      = mix(color, c3, smoothstep(0.30, 0.65, radius));
                     color      = mix(color, c4, smoothstep(0.65, 1.00, radius));
 
-                    gl_FragColor = vec4(color, rings * 0.85);
+                    // Outer edge fades out so rings blend into the white background
+                    float edgeFade = 1.0 - smoothstep(0.75, 1.0, radius);
+                    gl_FragColor = vec4(color, rings * 0.8 * edgeFade);
                 }
             `,
             transparent: true,
@@ -440,7 +445,7 @@
             depthWrite: false
         });
         const sunRing = new THREE.Mesh(sunRingGeo, sunRingMat);
-        sunRing.rotation.x = -Math.PI / 2.5; // Tilt to show rings at an angle
+        sunRing.rotation.x = -Math.PI / 2.5;
 
         const sunGroup = new THREE.Group();
         sunGroup.add(sunCore);
@@ -656,8 +661,11 @@
                         this.vy += (bhDy / bhDist) * gravForce * 0.3 + swirlY * gravForce * 0.2;
                         this.size = this.baseSize * (1 + gravForce * 0.6);
 
-                        // Heavy drag near the core — particles slow down as they approach
-                        const proximityDamping = 1.0 - gravForce * 0.6;
+                        // Heavy drag near the core — particles slow down as they approach.
+                        // Extra damping inside the event horizon radius so they spiral
+                        // slowly rather than shooting through.
+                        const insideFactor = bhDist < 120 ? 0.88 : 1.0;
+                        const proximityDamping = (1.0 - gravForce * 0.6) * insideFactor;
                         this.vx *= proximityDamping;
                         this.vy *= proximityDamping;
 
