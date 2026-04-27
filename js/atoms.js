@@ -24,6 +24,13 @@
 (function () {
     'use strict';
 
+    // Shared theme state — kept in sync via MutationObserver so both
+    // the Three.js section and the particle section can read it cheaply.
+    let darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    new MutationObserver(() => {
+        darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
     // Check if the user has "Reduce Motion" enabled in their OS.
     // If they do, we skip the particle animation entirely.
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -306,7 +313,145 @@
         blackHoleGroup.rotation.x = Math.PI * 0.15;
         blackHoleGroup.rotation.z = -Math.PI * 0.1;
 
-        scene.add(blackHoleGroup); // Add the group to the scene
+        blackHoleGroup.visible = darkMode; // Only shown in dark mode
+        scene.add(blackHoleGroup);
+
+
+        // ═══════════════════════════════════════════════
+        // SUN (light mode)
+        // Shown instead of the black hole in light mode.
+        // Colours: #f2f2f2 / #a0a0b0 / #666677 / #444455
+        // ═══════════════════════════════════════════════
+
+        // ── Sun core — solid sphere with limb darkening ──
+        const sunCoreGeo = new THREE.SphereGeometry(1.1, 64, 64);
+        const sunCoreMat = new THREE.ShaderMaterial({
+            vertexShader: `
+                varying vec3 vNormal;
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vNormal;
+                void main() {
+                    float cosTheta = clamp(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
+                    float limb  = pow(cosTheta, 0.4);
+                    vec3 bright = vec3(0.949, 0.949, 0.949); // #f2f2f2
+                    vec3 dim    = vec3(0.627, 0.627, 0.690); // #a0a0b0
+                    gl_FragColor = vec4(mix(dim, bright, limb), 1.0);
+                }
+            `
+        });
+        const sunCore = new THREE.Mesh(sunCoreGeo, sunCoreMat);
+
+        // ── Inner corona rim (BackSide glow, like photon ring) ──
+        const sunInnerGlowGeo = new THREE.SphereGeometry(1.28, 32, 32);
+        const sunInnerGlowMat = new THREE.ShaderMaterial({
+            vertexShader: `
+                varying vec3 vNormal;
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vNormal;
+                void main() {
+                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.5);
+                    gl_FragColor = vec4(0.627, 0.627, 0.690, intensity * 1.8); // #a0a0b0
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            side: THREE.BackSide,
+            depthWrite: false
+        });
+        const sunInnerGlow = new THREE.Mesh(sunInnerGlowGeo, sunInnerGlowMat);
+
+        // ── Outer corona halo (soft, large) ──
+        const sunOuterGlowGeo = new THREE.SphereGeometry(1.7, 32, 32);
+        const sunOuterGlowMat = new THREE.ShaderMaterial({
+            vertexShader: `
+                varying vec3 vNormal;
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vNormal;
+                void main() {
+                    float intensity = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.5);
+                    gl_FragColor = vec4(0.400, 0.400, 0.467, intensity * 0.7); // #666677
+                }
+            `,
+            transparent: true,
+            blending: THREE.NormalBlending,
+            side: THREE.BackSide,
+            depthWrite: false
+        });
+        const sunOuterGlow = new THREE.Mesh(sunOuterGlowGeo, sunOuterGlowMat);
+
+        // ── Corona rings (animated, like accretion disk but for the sun) ──
+        const sunRingGeo = new THREE.RingGeometry(1.35, 2.8, 64, 8);
+        const sunRingUniforms = { u_time: { value: 0 } };
+        const sunRingMat = new THREE.ShaderMaterial({
+            uniforms: sunRingUniforms,
+            vertexShader: `
+                varying vec3 vLocalPos;
+                void main() {
+                    vLocalPos = position;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float u_time;
+                varying vec3 vLocalPos;
+                void main() {
+                    float dist   = length(vLocalPos.xy);
+                    float radius = clamp((dist - 1.35) / 1.45, 0.0, 1.0);
+
+                    float rings = 0.0;
+                    float band1 = smoothstep(0.00, 0.05, radius) * smoothstep(0.22, 0.13, radius); rings += band1 * 0.90;
+                    float band2 = smoothstep(0.26, 0.30, radius) * smoothstep(0.56, 0.46, radius); rings += band2 * 0.75;
+                    float band3 = smoothstep(0.60, 0.64, radius) * smoothstep(0.80, 0.73, radius); rings += band3 * 0.55;
+                    float band4 = smoothstep(0.84, 0.87, radius) * smoothstep(0.98, 0.93, radius); rings += band4 * 0.35;
+
+                    float detail = smoothstep(0.3, 0.6, fract(radius * 34.0 + u_time * 0.04)) * 0.12 + 0.88;
+                    rings *= detail;
+
+                    vec3 c1 = vec3(0.949, 0.949, 0.949); // #f2f2f2
+                    vec3 c2 = vec3(0.627, 0.627, 0.690); // #a0a0b0
+                    vec3 c3 = vec3(0.400, 0.400, 0.467); // #666677
+                    vec3 c4 = vec3(0.267, 0.267, 0.333); // #444455
+
+                    vec3 color = mix(c1, c2, smoothstep(0.00, 0.30, radius));
+                    color      = mix(color, c3, smoothstep(0.30, 0.65, radius));
+                    color      = mix(color, c4, smoothstep(0.65, 1.00, radius));
+
+                    gl_FragColor = vec4(color, rings * 0.85);
+                }
+            `,
+            transparent: true,
+            blending: THREE.NormalBlending,
+            side: THREE.DoubleSide,
+            depthWrite: false
+        });
+        const sunRing = new THREE.Mesh(sunRingGeo, sunRingMat);
+        sunRing.rotation.x = -Math.PI / 2.5; // Tilt to show rings at an angle
+
+        const sunGroup = new THREE.Group();
+        sunGroup.add(sunCore);
+        sunGroup.add(sunInnerGlow);
+        sunGroup.add(sunOuterGlow);
+        sunGroup.add(sunRing);
+        sunGroup.rotation.x =  Math.PI * 0.12;
+        sunGroup.rotation.z =  Math.PI * 0.06;
+        sunGroup.visible = !darkMode; // Only shown in light mode
+        scene.add(sunGroup);
+
 
         // ── Resize handler ──
         // When the browser window resizes, we update the renderer size
@@ -332,26 +477,28 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            const time = clock.getElapsedTime(); // Seconds since start
+            const time = clock.getElapsedTime();
 
-            // Gently float the black hole up and down using a sine wave
-            // Math.sin oscillates between -1 and 1 over time
-            blackHoleGroup.position.y = Math.sin(time * 1.5) * 0.15;
+            // Switch between black hole (dark) and sun (light) each frame
+            blackHoleGroup.visible = darkMode;
+            sunGroup.visible       = !darkMode;
 
-            // Very slow continuous rotation
-            blackHoleGroup.rotation.y = time * 0.03;
+            if (darkMode) {
+                // ── Black hole animation ──
+                blackHoleGroup.position.y = Math.sin(time * 1.5) * 0.15;
+                blackHoleGroup.rotation.y = time * 0.03;
+                diskUniforms.u_time.value = time;
+                diskUniforms.u_cameraPos.value.copy(camera.position);
+                diskUniforms.u_darkMode.value = 1.0;
+            } else {
+                // ── Sun animation ──
+                sunGroup.position.y      = Math.sin(time * 0.8) * 0.1;
+                sunGroup.rotation.y      = time * 0.015;
+                sunRingUniforms.u_time.value = time;
+            }
 
-            // Update shader uniforms so the disk animation stays in sync
-            diskUniforms.u_time.value = time;
-            diskUniforms.u_cameraPos.value.copy(camera.position);
-
-            // Update dark mode flag every frame so the disk colour switches
-            // immediately when the user toggles the theme
-            diskUniforms.u_darkMode.value =
-                document.documentElement.getAttribute('data-theme') === 'dark' ? 1.0 : 0.0;
-
-            controls.update();               // Apply damping to orbit controls
-            renderer.render(scene, camera);  // Draw everything
+            controls.update();
+            renderer.render(scene, camera);
         }
 
         animate(); // Start the loop
@@ -485,10 +632,10 @@
                     this.grabbed = false;
                 }
 
-                // ── Black hole gravity ──
+                // ── Black hole gravity (dark mode only) ──
                 // Particles within 450px of the black hole get pulled toward it
                 // and orbit it slightly (swirl effect)
-                if (bhScreenX !== -1000 && bhScreenY !== -1000) {
+                if (darkMode && bhScreenX !== -1000 && bhScreenY !== -1000) {
                     const bhDx   = bhScreenX - this.x;
                     const bhDy   = bhScreenY - this.y;
                     const bhDist = Math.sqrt(bhDx * bhDx + bhDy * bhDy);
