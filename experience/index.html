@@ -84,6 +84,23 @@
         .work-card-description {
             flex: 1;
         }
+
+        .card-know-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: var(--space-4);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            color: var(--accent-purple);
+            opacity: 0.75;
+            transition: opacity var(--duration-base) var(--ease-smooth),
+                        gap var(--duration-base) var(--ease-smooth);
+        }
+        a:hover .card-know-more {
+            opacity: 1;
+            gap: 8px;
+        }
     </style>
 </head>
 
