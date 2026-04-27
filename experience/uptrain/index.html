@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpTrain (YC W23) — Pratham Oza</title>
+    <meta name="description" content="Pratham Oza at UpTrain — Part of Founding Team, Founder's Office. YC W23 AI startup. LLM evaluation, outbound sales, content.">
+    <meta name="author" content="Pratham Oza">
+    <meta property="og:title" content="UpTrain (YC W23) — Pratham Oza">
+    <meta property="og:description" content="Founding Team, Founder's Office at UpTrain (YC W23). 50+ companies researched, 100+ outreaches, 4 LLM blogs published.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://poza.in/experience/uptrain">
+    <meta property="og:image" content="https://poza.in/assets/images/og-banner.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://poza.in/assets/images/og-banner.png">
+    <link rel="canonical" href="https://poza.in/experience/uptrain">
+    <link rel="icon" href="/assets/images/poza-logo-transparent.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Prevent FOUC for Dark Mode -->
+    <script>
+        (function() {
+            try {
+                var localTheme = localStorage.getItem('theme');
+                if (localTheme === 'dark' || (!localTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <style>
+        /* ── UpTrain detail page styles ── */
+
+        .detail-hero {
+            padding-top: calc(var(--nav-height) + var(--space-16));
+            padding-bottom: var(--space-12);
+        }
+
+        .detail-back {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-8);
+            transition: color var(--duration-base) var(--ease-smooth);
+        }
+        .detail-back:hover { color: var(--accent-purple); }
+        .detail-back::before { content: '←'; }
+
+        .detail-company {
+            display: flex;
+            align-items: center;
+            gap: var(--space-5);
+            margin-bottom: var(--space-6);
+        }
+
+        .detail-company-icon {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .detail-company-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .detail-company-name {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 400;
+            letter-spacing: var(--tracking-tight);
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .detail-role {
+            font-size: var(--text-lg);
+            color: var(--accent-purple);
+            font-weight: 500;
+        }
+
+        .detail-period {
+            font-size: var(--text-sm);
+            color: var(--text-tertiary);
+        }
+
+        .detail-summary {
+            font-size: var(--text-base);
+            color: var(--text-secondary);
+            line-height: var(--leading-relaxed);
+            max-width: 680px;
+            margin-bottom: var(--space-6);
+        }
+
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            margin-bottom: var(--space-12);
+        }
+
+        /* ── Highlights section ── */
+
+        .highlights-label {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            letter-spacing: var(--tracking-wider);
+            text-transform: uppercase;
+            color: var(--accent-purple);
+            margin-bottom: var(--space-6);
+        }
+
+        .highlights-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+
+        .highlight-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: var(--space-5);
+            align-items: start;
+            padding: var(--space-6);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            transition: border-color var(--duration-base) var(--ease-smooth),
+                        box-shadow var(--duration-base) var(--ease-smooth),
+                        transform var(--duration-base) var(--ease-smooth);
+        }
+
+        .highlight-item:hover {
+            border-color: rgba(122, 99, 255, 0.25);
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+
+        .highlight-number {
+            font-size: var(--text-xs);
+            font-weight: 700;
+            color: var(--accent-purple);
+            opacity: 0.55;
+            letter-spacing: 0.05em;
+            padding-top: 3px;
+            min-width: 24px;
+        }
+
+        .highlight-text {
+            font-size: var(--text-base);
+            color: var(--text-secondary);
+            line-height: var(--leading-normal);
+        }
+
+        .highlight-text strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ── Stats strip ── */
+
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-12);
+        }
+
+        .stat-card {
+            padding: var(--space-6);
+            background: var(--gradient-subtle);
+            border: 1px solid rgba(122, 99, 255, 0.1);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: var(--text-3xl);
+            font-weight: 400;
+            letter-spacing: var(--tracking-tight);
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: var(--space-1);
+        }
+
+        .stat-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            letter-spacing: var(--tracking-wide);
+            text-transform: uppercase;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .detail-company {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-3);
+            }
+
+            .detail-company-name {
+                font-size: var(--text-3xl);
+            }
+
+            .stats-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .highlight-item:hover {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-strip {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particleBg"></canvas>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo"><img src="/assets/images/poza-logo-transparent.svg" alt="Poza" class="nav-logo-img"></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/experience" class="nav-link">Experience</a></li>
+                <li><a href="/projects" class="nav-link">Projects</a></li>
+                <li><a href="/startup" class="nav-link">Startup</a></li>
+                <li><a href="/awards" class="nav-link">Awards</a></li>
+                <li><a href="/education" class="nav-link">Education</a></li>
+                <li><a href="/mylife" class="nav-link">My Life</a></li>
+                <li><a href="/#contact" class="nav-link nav-link-contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Detail Hero -->
+    <section class="detail-hero">
+        <div class="container">
+
+            <a href="/experience" class="detail-back reveal">Back to Experience</a>
+
+            <div class="detail-company reveal">
+                <div class="detail-company-icon">🚀</div>
+                <div class="detail-company-info">
+                    <h1 class="detail-company-name">UpTrain (YC W23)</h1>
+                    <div class="detail-role">Founding Team — Founder's Office</div>
+                    <div class="detail-period">Sep – Dec 2023 · Y Combinator W23 · AI / LLM Evaluation</div>
+                </div>
+            </div>
+
+            <p class="detail-summary reveal">
+                Part of the Founding Team in the Founder's Office at UpTrain, a Y Combinator W23 company building open-source LLM evaluation infrastructure. Drove early GTM through research, outbound sales, content, and social outreach.
+            </p>
+
+            <div class="detail-tags reveal">
+                <span class="tag">YC W23</span>
+                <span class="tag">AI</span>
+                <span class="tag">LLM</span>
+                <span class="tag">Sales</span>
+                <span class="tag">Growth</span>
+                <span class="tag">Content</span>
+            </div>
+
+            <!-- Stats Strip -->
+            <div class="stats-strip">
+                <div class="stat-card reveal reveal-delay-1">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Companies Researched</div>
+                </div>
+                <div class="stat-card reveal reveal-delay-2">
+                    <div class="stat-value">100+</div>
+                    <div class="stat-label">Outreaches Done</div>
+                </div>
+                <div class="stat-card reveal reveal-delay-3">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">LLM Blogs Published</div>
+                </div>
+                <div class="stat-card reveal reveal-delay-4">
+                    <div class="stat-value">YC</div>
+                    <div class="stat-label">W23 Cohort</div>
+                </div>
+            </div>
+
+            <!-- Highlights -->
+            <div class="highlights-label reveal">Key Contributions</div>
+            <div class="highlights-list">
+
+                <div class="highlight-item reveal reveal-delay-1">
+                    <div class="highlight-number">01</div>
+                    <p class="highlight-text">
+                        Collected startup experience through the <strong>YCombinator Cohort of Winter 2023</strong>,
+                        working directly in the Founder's Office on early-stage GTM and growth.
+                    </p>
+                </div>
+
+                <div class="highlight-item reveal reveal-delay-2">
+                    <div class="highlight-number">02</div>
+                    <p class="highlight-text">
+                        Researched the <strong>AI Business Sector of 50+ companies</strong> in the North American Region,
+                        with special focus on <strong>independent LLM owners</strong>.
+                    </p>
+                </div>
+
+                <div class="highlight-item reveal reveal-delay-3">
+                    <div class="highlight-number">03</div>
+                    <p class="highlight-text">
+                        Developed <strong>inbound and outbound sales strategies</strong> on
+                        <strong>Apollo Intelligence</strong> via performing <strong>100+ company-targeted outreaches</strong>.
+                    </p>
+                </div>
+
+                <div class="highlight-item reveal reveal-delay-4">
+                    <div class="highlight-number">04</div>
+                    <p class="highlight-text">
+                        Published <strong>4 blogs on Evaluation Metrics of Large Language Models</strong>,
+                        contributing to UpTrain's thought leadership in the LLM space.
+                    </p>
+                </div>
+
+                <div class="highlight-item reveal">
+                    <div class="highlight-number">05</div>
+                    <p class="highlight-text">
+                        Handled <strong>LinkedIn and X (Twitter) outreach</strong> for UpTrain,
+                        growing brand presence among AI practitioners and early adopters.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" style="margin-top: var(--space-20);">
+        <div class="container">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 Pratham Oza. Built with intention.</span>
+                <div class="footer-links">
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/experience" class="footer-link">Experience</a>
+                    <a href="/projects" class="footer-link">Projects</a>
+                    <a href="/startup" class="footer-link">Startup</a>
+                    <a href="/awards" class="footer-link">Awards</a>
+                    <a href="/education" class="footer-link">Education</a>
+                    <a href="/mylife" class="footer-link">My Life</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script defer src="/js/atoms.js"></script>
+    <script defer src="/js/main.js"></script>
+</body>
+
+</html>
