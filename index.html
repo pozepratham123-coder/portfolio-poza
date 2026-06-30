@@ -10,6 +10,9 @@
          Without this, mobile browsers zoom out and show a tiny desktop page. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Prevent search engines from indexing this archived version -->
+    <meta name="robots" content="noindex, nofollow">
+
     <!-- The text that appears in the browser tab -->
     <title>Poza</title>
 
@@ -45,12 +48,13 @@
     <!-- The canonical URL tells Google which URL is the "official" one
          for this page, preventing duplicate content issues -->
     <link rel="canonical" href="https://poza.in">
+    <!-- This is an archived version hosted at old.poza.in -->
 
     <!-- og:url = the page URL to use in the share card
          og:image = the preview image (1200×630px recommended)
          og:image:width/height helps platforms render the image faster -->
-    <meta property="og:url" content="https://poza.in">
-    <meta property="og:image" content="https://poza.in/assets/images/og-banner.png">
+    <meta property="og:url" content="https://old.poza.in">
+    <meta property="og:image" content="https://old.poza.in/assets/images/og-banner.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
@@ -58,7 +62,7 @@
          summary_large_image = shows the full-width banner image -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@prathamoza">
-    <meta name="twitter:image" content="https://poza.in/assets/images/og-banner.png">
+    <meta name="twitter:image" content="https://old.poza.in/assets/images/og-banner.png">
 
     <!-- Favicon — the small icon shown in the browser tab -->
     <link rel="icon" href="/assets/images/poza-logo-transparent.svg" type="image/svg+xml">
@@ -78,6 +82,53 @@
 </head>
 
 <body>
+
+    <!-- Archived Site Banner -->
+    <div id="archivedBanner" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10000;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        text-align: center;
+        padding: 10px 20px;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    ">
+        <span>📦 This is an archived version of my portfolio.</span>
+        <a href="https://poza.in" style="
+            color: #fff;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: background 0.2s;
+        " onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">Visit New Site →</a>
+    </div>
+
+    <!-- Add padding to body to account for the fixed banner -->
+    <script>
+        (function() {
+            var banner = document.getElementById('archivedBanner');
+            if (banner) {
+                document.body.style.paddingTop = banner.offsetHeight + 'px';
+                window.addEventListener('resize', function() {
+                    document.body.style.paddingTop = banner.offsetHeight + 'px';
+                });
+            }
+        })();
+    </script>
 
     <!-- Particle Background -->
     <canvas id="particleBg"></canvas>
@@ -486,7 +537,7 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Pratham Oza",
-      "url": "https://poza.in",
+      "url": "https://old.poza.in",
       "jobTitle": "Head of GTM at Fibr AI",
       "description": "AI-powered growth and GTM leader. BITS Pilani CS, DAAD Grant Holder.",
       "sameAs": [
